@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company Center – NDC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ─── Design tokens ─── */
+    :root {
+      --navy:       #0F1059;
+      --navy-mid:   #1a1e7a;
+      --navy-light: #e8eaf6;
+      --teal:       #1d6a8a;
+      --teal-soft:  #2882a8;
+      --accent:     #f0a500;
+      --surface:    #f5f6fa;
+      --card:       #ffffff;
+      --border:     #e2e4ef;
+      --text:       #1a1a2e;
+      --muted:      #6b7280;
+      --badge-new:  #10b981;
+      --badge-upd:  #3b82f6;
+      --radius:     10px;
+      --shadow:     0 2px 12px rgba(15,16,89,.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ════════════════════════════
+       TOP NAV
+    ════════════════════════════ */
+    .topbar {
+      background: var(--navy);
+      color: #fff;
+      height: 60px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 16px rgba(0,0,0,.25);
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .topbar-logo img {
+      height: 36px;
+      width: auto;
+      /* logo is navy-on-white — invert to white for dark topbar */
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+    .topbar-logo .logo-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255,255,255,.25);
+    }
+    .topbar-logo .logo-label {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .topbar-logo .logo-label .ll-main {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .3px;
+      line-height: 1.2;
+    }
+    .topbar-logo .logo-label .ll-sub {
+      font-size: .68rem;
+      color: rgba(255,255,255,.5);
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .topbar-nav > li > a,
+    .topbar-nav > li .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.85);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      border: none;
+      background: transparent;
+    }
+    .topbar-nav > li > a:hover,
+    .topbar-nav > li .nav-btn:hover,
+    .topbar-nav > li.active > a {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+    }
+
+    /* Dropdown */
+    .has-dropdown { position: relative; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 220px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.14);
+      overflow: hidden;
+      z-index: 300;
+    }
+    .dropdown-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      font-size: .9rem;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+    }
+    .dropdown-menu a:last-child { border-bottom: none; }
+    .dropdown-menu a:hover { background: var(--navy-light); }
+    .dropdown-menu a .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      flex-shrink: 0;
+    }
+    .has-dropdown:hover .dropdown-menu { display: block; }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topbar-actions .icon-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      display: grid; place-items: center;
+      color: #fff;
+      cursor: pointer;
+      font-size: .9rem;
+      transition: background .15s;
+      position: relative;
+    }
+    .topbar-actions .icon-btn:hover { background: rgba(255,255,255,.22); }
+    .notif-badge {
+      position: absolute;
+      top: 3px; right: 3px;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 1.5px solid var(--navy);
+    }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--teal-soft);
+      display: grid; place-items: center;
+      font-size: .8rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* ════════════════════════════
+       HERO / ANNOUNCEMENT BANNER
+    ════════════════════════════ */
+    .hero-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-slides { display: flex; }
+
+    .hero-slide {
+      min-width: 100%;
+      height: 300px;
+      background: linear-gradient(120deg, var(--navy) 0%, var(--teal) 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .5s ease;
+    }
+
+    /* decorative shapes */
+    .hero-slide::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+    }
+    .hero-slide::after {
+      content: '';
+      position: absolute;
+      right: 120px; bottom: -80px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+
+    .hero-content { z-index: 1; }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--navy);
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .hero-slide h2 {
+      color: #fff;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      max-width: 600px;
+    }
+    .hero-slide p {
+      color: rgba(255,255,255,.75);
+      font-size: .95rem;
+      max-width: 500px;
+    }
+    .hero-slide .hero-date {
+      color: rgba(255,255,255,.55);
+      font-size: .8rem;
+      margin-top: 14px;
+    }
+
+    /* slide dots */
+    .hero-dots {
+      position: absolute;
+      bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px;
+      z-index: 10;
+    }
+    .hero-dots .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.35);
+      cursor: pointer;
+      transition: background .2s, width .2s;
+    }
+    .hero-dots .dot.active {
+      background: #fff;
+      width: 22px;
+      border-radius: 4px;
+    }
+
+    /* hero arrows */
+    .hero-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.15);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+      font-size: .85rem;
+      transition: background .15s;
+    }
+    .hero-arrow:hover { background: rgba(255,255,255,.28); }
+    .hero-arrow.left  { left: 16px; }
+    .hero-arrow.right { right: 16px; }
+
+    /* ════════════════════════════
+       DEPARTMENT FILTER BAR
+    ════════════════════════════ */
+    .dept-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      height: 50px;
+    }
+    .dept-bar::-webkit-scrollbar { height: 3px; }
+    .dept-bar::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 2px; }
+
+    .dept-chip {
+      flex-shrink: 0;
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+    }
+    .dept-chip:hover { border-color: var(--navy); color: var(--navy); }
+    .dept-chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    /* ════════════════════════════
+       MAIN GRID
+    ════════════════════════════ */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+      padding: 28px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .left-col  { display: flex; flex-direction: column; gap: 24px; }
+    .right-col { display: flex; flex-direction: column; gap: 24px; }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-head-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .card-head-title .icon {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      background: var(--navy-light);
+      display: grid; place-items: center;
+      color: var(--navy);
+      font-size: .8rem;
+    }
+    .card-head-link {
+      font-size: .8rem;
+      color: var(--teal-soft);
+      font-weight: 500;
+    }
+    .card-head-link:hover { text-decoration: underline; }
+
+    .card-body { padding: 16px 20px; }
+
+    /* ─── News List ─── */
+    .news-list { display: flex; flex-direction: column; gap: 1px; }
+
+    .news-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .news-item:last-child { border-bottom: none; }
+
+    .news-thumb {
+      width: 80px; height: 58px;
+      border-radius: 6px;
+      background: var(--navy-light);
+      display: grid; place-items: center;
+      font-size: 1.4rem;
+      color: var(--navy);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .news-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .news-meta { flex: 1; }
+    .news-meta h4 {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .news-meta p {
+      font-size: .78rem;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+    .news-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .news-footer .dept-tag {
+      font-size: .7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--navy-light);
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .news-footer .date {
+      font-size: .73rem;
+      color: var(--muted);
+    }
+
+    /* ─── Doc List ─── */
+    .doc-list { display: flex; flex-direction: column; }
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-item:last-child { border-bottom: none; }
+    .doc-icon {
+      width: 36px; height: 36px;
+      border-radius: 7px;
+      display: grid; place-items: center;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+    .doc-icon.pdf { background: #fee2e2; color: #dc2626; }
+    .doc-icon.doc { background: #dbeafe; color: #2563eb; }
+    .doc-icon.xls { background: #dcfce7; color: #16a34a; }
+
+    .doc-info { flex: 1; }
+    .doc-info .doc-name {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .doc-info .doc-sub {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      font-size: .68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+    .badge.new { background: #d1fae5; color: var(--badge-new); }
+    .badge.upd { background: #dbeafe; color: var(--badge-upd); }
+    .badge.rev { background: #fef3c7; color: #d97706; }
+
+    /* ─── Apps Grid ─── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      padding: 4px 0;
+    }
+    .app-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      padding: 14px 8px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s, transform .1s;
+    }
+    .app-tile:hover {
+      border-color: var(--navy);
+      box-shadow: 0 4px 14px rgba(15,16,89,.1);
+      transform: translateY(-2px);
+    }
+    .app-tile .app-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 1.1rem;
+    }
+    .app-tile .app-label {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+
+    /* App icon colours */
+    .ic-blue   { background: #dbeafe; color: #2563eb; }
+    .ic-green  { background: #dcfce7; color: #16a34a; }
+    .ic-amber  { background: #fef3c7; color: #d97706; }
+    .ic-purple { background: #ede9fe; color: #7c3aed; }
+    .ic-rose   { background: #ffe4e6; color: #e11d48; }
+    .ic-teal   { background: #ccfbf1; color: #0f766e; }
+    .ic-sky    { background: #e0f2fe; color: #0284c7; }
+    .ic-indigo { background: #e0e7ff; color: #4338ca; }
+    .ic-navy   { background: var(--navy-light); color: var(--navy); }
+    .ic-orange { background: #ffedd5; color: #c2410c; }
+
+    /* ─── Department Cards (click-through view) ─── */
+    .dept-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .dept-card {
+      background: var(--navy);
+      border-radius: 8px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .dept-card:hover {
+      background: var(--navy-mid);
+      transform: translateY(-2px);
+    }
+    .dept-card .dept-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.12);
+      display: grid; place-items: center;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .dept-card .dept-name {
+      font-size: .85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .dept-card .dept-count {
+      font-size: .72rem;
+      color: rgba(255,255,255,.55);
+    }
+
+    /* ─── Calendar Widget ─── */
+    .cal-widget { padding: 0; }
+
+    .cal-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cal-header .cal-title { font-weight: 700; font-size: .95rem; }
+    .cal-header .cal-nav {
+      display: flex; gap: 6px;
+    }
+    .cal-header .cal-nav button {
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: .8rem;
+      display: grid; place-items: center;
+      transition: background .15s;
+    }
+    .cal-header .cal-nav button:hover { background: rgba(255,255,255,.28); }
+
+    .cal-grid {
+      padding: 12px 14px;
+    }
+    .cal-days-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .cal-days-header span:first-child { color: #ef4444; }
+    .cal-days-header span:last-child  { color: #3b82f6; }
+
+    .cal-body {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      font-size: .78rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .cal-day:hover { background: var(--navy-light); }
+    .cal-day.today {
+      background: var(--navy);
+      color: #fff;
+      font-weight: 700;
+    }
+    .cal-day.holiday {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    .cal-day.work-marked { position: relative; }
+    .cal-day.work-marked::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .cal-day.other-month { color: #d1d5db; }
+    .cal-day.sunday { color: #ef4444; }
+    .cal-day.saturday { color: #3b82f6; }
+
+    .cal-legend {
+      display: flex;
+      gap: 14px;
+      padding: 10px 14px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .cal-legend .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .72rem;
+      color: var(--muted);
+    }
+    .cal-legend .leg-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ─── Recent Docs (sidebar) ─── */
+    .mini-doc {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .mini-doc:last-child { border-bottom: none; }
+    .mini-doc .mini-icon {
+      width: 30px; height: 30px;
+      border-radius: 6px;
+      display: grid; place-items: center;
+      font-size: .78rem;
+      flex-shrink: 0;
+    }
+    .mini-doc .mini-info .mini-name {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .mini-doc .mini-info .mini-date {
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    /* ─── Org Chart Preview ─── */
+    .org-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 12px 0 4px;
+    }
+    .org-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .org-box {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 7px;
+      padding: 7px 18px;
+      font-size: .78rem;
+      font-weight: 600;
+      text-align: center;
+      min-width: 100px;
+    }
+    .org-box.mid  { background: var(--teal); }
+    .org-box.leaf { background: var(--teal-soft); font-size: .72rem; padding: 6px 12px; min-width: 80px; }
+    .org-connector {
+      width: 2px;
+      height: 18px;
+      background: var(--border);
+    }
+    .org-row {
+      display: flex;
+      gap: 8px;
+      position: relative;
+      padding-top: 18px;
+    }
+    .org-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px; height: 18px;
+      background: var(--border);
+      transform: translateX(-50%);
+    }
+    .org-row::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(50% - (var(--span-w,140px) / 2));
+      width: var(--span-w, 140px);
+      height: 2px;
+      background: var(--border);
+    }
+    .org-sub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .org-sub .org-connector { height: 0; }
+
+    /* ─── Contact Info ─── */
+    .contact-list { display: flex; flex-direction: column; gap: 10px; }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: .85rem;
+    }
+    .contact-row .ci {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      background: var(--navy-light);
+      color: var(--navy);
+      display: grid; place-items: center;
+      font-size: .8rem;
+      flex-shrink: 0;
+    }
+    .contact-row .cv { color: var(--text); }
+    .contact-row .cl { font-size: .75rem; color: var(--muted); }
+
+    /* ─── Department View (hidden by default) ─── */
+    #dept-view { display: none; }
+    #dept-view.visible { display: block; }
+
+    .dept-view-head {
+      background: var(--navy);
+      color: #fff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .dept-view-head h2 { font-size: 1.1rem; font-weight: 700; }
+    .dept-back {
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-family: 'Sarabun', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .dept-back:hover { background: rgba(255,255,255,.25); }
+
+    /* ─── Section heading (standalone pages) ─── */
+    .section-intro {
+      background: linear-gradient(90deg, var(--navy), var(--teal));
+      color: #fff;
+      padding: 22px 32px;
+      margin-bottom: 24px;
+    }
+    .section-intro h2 { font-size: 1.2rem; font-weight: 700; }
+    .section-intro p  { font-size: .85rem; color: rgba(255,255,255,.7); margin-top: 4px; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.65);
+      padding: 22px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .82rem;
+      margin-top: 10px;
+    }
+    footer strong { color: #fff; }
+    footer .footer-links { display: flex; gap: 16px; }
+    footer .footer-links a {
+      color: rgba(255,255,255,.55);
+      transition: color .15s;
+    }
+    footer .footer-links a:hover { color: #fff; }
+
+    /* ─── Section title (inside page) ─── */
+    .sec-title {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 14px;
+    }
+
+    /* ════════════════════════════
+       WORKFLOW STEPS BAR
+    ════════════════════════════ */
+    .workflow-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      overflow-x: auto;
+    }
+    .workflow-bar::-webkit-scrollbar { height: 3px; }
+    .workflow-bar::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 2px; }
+
+    .wf-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .wf-step:hover { background: var(--navy-light); }
+    .wf-step.active {
+      border-bottom-color: var(--navy);
+      background: var(--navy-light);
+    }
+    .wf-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--border);
+      display: grid; place-items: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    .wf-step.active .wf-num {
+      background: var(--navy);
+      color: #fff;
+    }
+    .wf-label {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.4;
+      white-space: normal;
+      max-width: 110px;
+    }
+    .wf-step.active .wf-label { color: var(--navy); }
+
+    .wf-arrow {
+      display: flex;
+      align-items: center;
+      color: var(--border);
+      font-size: .75rem;
+      padding: 0 2px;
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════
+       DEPT NEWS BANNER
+    ════════════════════════════ */
+    .dept-news-banner {
+      background: var(--navy);
+      padding: 0 32px;
+    }
+    .dept-news-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 48px;
+      overflow: hidden;
+    }
+    .dept-news-tag {
+      background: var(--accent);
+      color: var(--navy);
+      padding: 3px 12px;
+      border-radius: 4px;
+      font-size: .75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dept-news-scroll {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .dept-news-scroll span {
+      display: inline-block;
+      color: rgba(255,255,255,.85);
+      font-size: .83rem;
+      animation: marquee 28s linear infinite;
+    }
+
+    /* ════════════════════════════
+       DEPT BODY
+    ════════════════════════════ */
+    .dept-body {
+      padding: 28px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dept-section-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 14px;
+    }
+    .dept-section-head .icon {
+      width: 24px; height: 24px;
+      border-radius: 5px;
+      background: var(--navy-light);
+      display: grid; place-items: center;
+      color: var(--navy);
+      font-size: .72rem;
+    }
+
+    /* 3-col dept card grid (matching screenshot) */
+    .dept-card-grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* dept card — navy tile style from screenshot */
+    .dept-tile {
+      background: var(--navy);
+      border-radius: 10px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background .15s, transform .1s, box-shadow .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .dept-tile::before {
+      content: '';
+      position: absolute;
+      right: -20px; top: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+    }
+    .dept-tile:hover {
+      background: var(--navy-mid);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(15,16,89,.2);
+    }
+    .dept-tile .dt-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.13);
+      display: grid; place-items: center;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+    .dept-tile .dt-name {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+    }
+    .dept-tile .dt-count {
+      font-size: .72rem;
+      color: rgba(255,255,255,.5);
+    }
+    .dept-tile .dt-arrow {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.25);
+      font-size: .75rem;
+    }
+
+    /* bottom docs + contact */
+    .dept-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .main-grid          { grid-template-columns: 1fr; }
+      .right-col          { order: -1; }
+      .app-grid           { grid-template-columns: repeat(4, 1fr); }
+      .dept-card-grid     { grid-template-columns: repeat(2, 1fr); }
+      .dept-card-grid3    { grid-template-columns: repeat(2, 1fr); }
+      .dept-bottom-grid   { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .topbar-nav         { display: none; }
+      .hero-slide h2      { font-size: 1.2rem; }
+      .app-grid           { grid-template-columns: repeat(3, 1fr); }
+      .dept-card-grid3    { grid-template-columns: 1fr 1fr; }
+      .workflow-bar       { padding: 0 16px; }
+      .dept-body          { padding: 20px 16px; }
+      .dept-news-banner   { padding: 0 16px; }
+    }
+
+    /* ─── Nav active state ─── */
+    .topbar-nav > li.nav-active > a,
+    .topbar-nav > li.nav-active > .nav-btn {
+      background: rgba(255,255,255,.18);
+      color: #fff;
+    }
+    .topbar-nav > li.nav-active > a::after,
+    .topbar-nav > li.nav-active > .nav-btn::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 18px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .topbar-nav > li { position: relative; }
+
+    /* ─── Page view shared header ─── */
+    .page-view { display: none; }
+    .page-view.visible { display: block; }
+
+    .page-header {
+      background: linear-gradient(120deg, var(--navy) 0%, var(--teal) 100%);
+      color: #fff;
+      padding: 20px 32px 18px;
+    }
+    .page-header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .page-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .78rem;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 8px;
+    }
+    .page-breadcrumb .bc-home {
+      cursor: pointer;
+      transition: color .15s;
+    }
+    .page-breadcrumb .bc-home:hover { color: #fff; }
+    .page-breadcrumb i { font-size: .6rem; }
+    .page-breadcrumb .bc-current { color: #fff; font-weight: 600; }
+    .page-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .page-subtitle {
+      font-size: .83rem;
+      color: rgba(255,255,255,.65);
+      margin-top: 3px;
+    }
+    .page-back-btn {
+      background: rgba(255,255,255,.15);
+      border: 1.5px solid rgba(255,255,255,.25);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-family: 'Sarabun', sans-serif;
+      display: flex; align-items: center; gap: 7px;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .page-back-btn:hover { background: rgba(255,255,255,.25); }
+
+    .page-body {
+      padding: 28px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ─── News page ─── */
+    .news-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .news-filter-row .search-box {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+    .news-filter-row .search-box input {
+      border: none; outline: none;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .85rem;
+      width: 100%;
+      background: transparent;
+    }
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      background: #fff;
+      transition: all .15s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .news-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow .15s, transform .1s;
+    }
+    .news-card:hover {
+      box-shadow: 0 6px 20px rgba(15,16,89,.1);
+      transform: translateY(-2px);
+    }
+    .news-card-img {
+      height: 120px;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: rgba(255,255,255,.5);
+    }
+    .news-card-body { padding: 14px 16px; }
+    .news-card-tag {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--navy-light);
+      color: var(--navy);
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    .news-card-title {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .news-card-excerpt {
+      font-size: .78rem;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-clamp: 2;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .news-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    /* ─── Documents page ─── */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 24px;
+    }
+    .docs-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .docs-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: background .12s, color .12s;
+    }
+    .docs-sidebar-item:hover { background: var(--navy-light); color: var(--navy); }
+    .docs-sidebar-item.active { background: var(--navy); color: #fff; }
+    .docs-sidebar-item .ds-icon {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.12);
+      display: grid; place-items: center;
+      font-size: .78rem;
+    }
+    .docs-sidebar-item:not(.active) .ds-icon {
+      background: var(--navy-light);
+      color: var(--navy);
+    }
+    .docs-sidebar-count {
+      margin-left: auto;
+      font-size: .7rem;
+      background: rgba(255,255,255,.2);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+    .docs-sidebar-item:not(.active) .docs-sidebar-count {
+      background: var(--border);
+      color: var(--muted);
+    }
+
+    .docs-table-wrap { overflow-x: auto; }
+    .docs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .84rem;
+    }
+    .docs-table th {
+      background: var(--navy-light);
+      color: var(--navy);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+    .docs-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .docs-table tr:last-child td { border-bottom: none; }
+    .docs-table tr:hover td { background: #fafbff; }
+    .docs-table .doc-dl-btn {
+      background: var(--navy-light);
+      color: var(--navy);
+      border: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .75rem;
+      font-family: 'Sarabun', sans-serif;
+      font-weight: 600;
+      display: flex; align-items: center; gap: 5px;
+      transition: background .12s;
+    }
+    .docs-table .doc-dl-btn:hover { background: var(--navy); color: #fff; }
+
+    /* ─── Org chart page ─── */
+    .org-full-wrap {
+      overflow-x: auto;
+      padding: 20px 0;
+    }
+    .org-chart-full {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      min-width: 700px;
+    }
+    .oc-level { display: flex; justify-content: center; gap: 16px; position: relative; }
+    .oc-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .oc-box {
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: .82rem;
+      font-weight: 700;
+      text-align: center;
+      min-width: 110px;
+      cursor: pointer;
+      transition: transform .1s, box-shadow .15s;
+    }
+    .oc-box:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+    .oc-box.ceo   { background: var(--navy); color: #fff; min-width: 180px; font-size: .9rem; }
+    .oc-box.vp    { background: var(--teal); color: #fff; }
+    .oc-box.mgr   { background: var(--teal-soft); color: #fff; min-width: 90px; font-size: .78rem; }
+    .oc-box.staff { background: var(--navy-light); color: var(--navy); min-width: 80px; font-size: .74rem; padding: 8px 12px; }
+    .oc-line-v {
+      width: 2px; height: 22px;
+      background: var(--border);
+    }
+    .oc-line-h-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      height: 22px;
+    }
+    .oc-line-h {
+      position: absolute;
+      top: 0;
+      height: 2px;
+      background: var(--border);
+    }
+    .oc-line-down {
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 22px;
+      background: var(--border);
+    }
+
+    /* ─── Contact page ─── */
+    .contact-page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .contact-dept-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .contact-dept-head {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .contact-dept-head .cd-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.15);
+      display: grid; place-items: center;
+      font-size: .9rem;
+    }
+    .contact-dept-head .cd-name { font-weight: 700; font-size: .92rem; }
+    .contact-dept-body { padding: 14px 18px; }
+    .contact-detail-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: .82rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-detail-row:last-child { border-bottom: none; }
+    .contact-detail-row i {
+      width: 16px;
+      text-align: center;
+      color: var(--navy);
+      font-size: .8rem;
+    }
+    .contact-detail-row span { color: var(--text); }
+    .contact-detail-row .sub { color: var(--muted); font-size: .73rem; }
+
+    .contact-map-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .contact-map-placeholder {
+      height: 180px;
+      background: linear-gradient(135deg, var(--navy-light), #d1d5e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--navy);
+    }
+    .contact-map-placeholder i { font-size: 2rem; opacity: .4; }
+    .contact-map-placeholder p { font-size: .78rem; color: var(--muted); }
+
+    /* ════════════════════════════
+       DOC-TYPE VIEW (SOP/Procedure/SIP/FM/WI)
+    ════════════════════════════ */
+    #doctype-view { display: none; }
+    #doctype-view.visible { display: block; }
+
+    /* Doc-type category cards */
+    .doctype-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .doctype-card {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s, transform .1s;
+      position: relative;
+    }
+    .doctype-card:hover,
+    .doctype-card.active {
+      border-color: var(--navy);
+      box-shadow: 0 4px 16px rgba(15,16,89,.12);
+      transform: translateY(-2px);
+    }
+    .doctype-card.active { background: var(--navy); }
+    .doctype-card .dtc-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-size: 1.3rem;
+      transition: background .15s, color .15s;
+    }
+    .doctype-card:not(.active) .dtc-icon { background: var(--navy-light); color: var(--navy); }
+    .doctype-card.active .dtc-icon { background: rgba(255,255,255,.15); color: #fff; }
+    .doctype-card .dtc-label {
+      font-size: .82rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .doctype-card.active .dtc-label { color: #fff; }
+    .doctype-card .dtc-full {
+      font-size: .7rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .doctype-card.active .dtc-full { color: rgba(255,255,255,.6); }
+    .dtc-count-badge {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: var(--navy);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      min-width: 22px;
+      text-align: center;
+    }
+    .doctype-card.active .dtc-count-badge { background: rgba(255,255,255,.25); }
+
+    /* Doc table inside doctype view */
+    .doctype-table-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .doctype-table-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .doctype-table-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .92rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .doctype-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: .82rem;
+      color: var(--muted);
+      min-width: 220px;
+    }
+    .doctype-search input {
+      border: none; outline: none;
+      background: transparent;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .82rem;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .doctype-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .doctype-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ─── Utility ─── */
+    .hidden { display: none !important; }
+
+    /* announce marquee */
+    .marquee-bar {
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--border);
+      padding: 7px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: .8rem;
+      overflow: hidden;
+    }
+    .marquee-label {
+      background: var(--navy);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: .75rem;
+      flex-shrink: 0;
+    }
+    .marquee-text {
+      overflow: hidden;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .marquee-text span {
+      display: inline-block;
+      animation: marquee 30s linear infinite;
+      color: var(--navy);
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TOP NAV
+══════════════════════════════════════ -->
+<nav class="topbar">
+  <div class="topbar-logo" onclick="navigate('home')">
+    <img src="Logo.png" alt="NDC Industrial" />
+    <div class="logo-divider"></div>
+    <div class="logo-label">
+      <span class="ll-main">Company Center</span>
+      <span class="ll-sub">NDC Industrial</span>
+    </div>
+  </div>
+
+  <ul class="topbar-nav" id="topbarNav">
+    <li class="has-dropdown" id="nav-dept">
+      <span class="nav-btn">
+        <i class="fa fa-sitemap"></i> แผนก <i class="fa fa-chevron-down" style="font-size:.65rem"></i>
+      </span>
+      <div class="dropdown-menu">
+        <a href="#" onclick="navigate('dept','Document Control');return false"><span class="dot"></span> Document Control</a>
+        <a href="#" onclick="navigate('dept','IT');return false"><span class="dot"></span> IT</a>
+        <a href="#" onclick="navigate('dept','QA');return false"><span class="dot"></span> QA</a>
+        <a href="#" onclick="navigate('dept','QMS');return false"><span class="dot"></span> QMS</a>
+        <a href="#" onclick="navigate('dept','SAFETY');return false"><span class="dot"></span> SAFETY</a>
+        <a href="#" onclick="navigate('dept','HR');return false"><span class="dot"></span> HR</a>
+      </div>
+    </li>
+    <li id="nav-org"><a href="#" onclick="navigate('org');return false"><i class="fa fa-building"></i> โครงสร้างองค์กร</a></li>
+    <li id="nav-news"><a href="#" onclick="navigate('news');return false"><i class="fa fa-newspaper"></i> ข่าวสาร</a></li>
+    <li id="nav-docs"><a href="#" onclick="navigate('docs');return false"><i class="fa fa-folder-open"></i> เอกสารทั้งหมด</a></li>
+    <li id="nav-contact"><a href="#" onclick="navigate('contact');return false"><i class="fa fa-address-card"></i> ช่องทางติดต่อ</a></li>
+  </ul>
+
+  <div class="topbar-actions">
+    <div class="icon-btn"><i class="fa fa-magnifying-glass"></i></div>
+    <div class="icon-btn">
+      <i class="fa fa-bell"></i>
+      <span class="notif-badge"></span>
+    </div>
+    <div class="avatar">NK</div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MARQUEE ANNOUNCE BAR
+══════════════════════════════════════ -->
+<div class="marquee-bar" id="marqueeBarEl">
+  <span class="marquee-label">ประกาศ</span>
+  <div class="marquee-text">
+    <span>
+      &nbsp;&nbsp;&nbsp; ประกาศวันหยุดพิเศษ 12 สิงหาคม 2569 &nbsp;|&nbsp;
+      เอกสาร QP-QMS-03 ได้รับการปรับปรุงเป็น Revision 3 แล้ว &nbsp;|&nbsp;
+      ขอเชิญเข้าร่วมอบรม Safety Training วันที่ 20 พฤษภาคม 2569 &nbsp;|&nbsp;
+      ระบบ HR Self-Service เปิดให้บริการแล้ว &nbsp;&nbsp;&nbsp;
+    </span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HERO SLIDER
+══════════════════════════════════════ -->
+<div class="hero-wrap" id="heroWrap">
+  <div class="hero-slides" id="heroSlides">
+
+    <!-- Slide 1: Announcement -->
+    <div class="hero-slide" style="background:linear-gradient(130deg,#0F1059 0%,#1d6a8a 100%)">
+      <div class="hero-content">
+        <span class="hero-tag">ข่าวสารประชาสัมพันธ์</span>
+        <h2>ประกาศวันหยุดนักขัตฤกษ์ ประจำปี 2569</h2>
+        <p>บริษัทฯ ได้ประกาศรายชื่อวันหยุดนักขัตฤกษ์ประจำปี 2569 เรียบร้อยแล้ว กรุณาตรวจสอบรายละเอียดในปฏิทินบริษัท</p>
+        <div class="hero-date"><i class="fa fa-calendar-days"></i> 06 พฤษภาคม 2569 &nbsp;|&nbsp; ฝ่าย HR</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Policy (fallback when no news) -->
+    <div class="hero-slide" style="background:linear-gradient(130deg,#1a1e7a 0%,#0f766e 100%)">
+      <div class="hero-content">
+        <span class="hero-tag" style="background:#fff;color:var(--navy)">นโยบายบริษัท</span>
+        <h2>นโยบายคุณภาพ ISO 9001:2015</h2>
+        <p>บริษัทมุ่งมั่นในการผลิตสินค้าและให้บริการที่มีคุณภาพ ตอบสนองความต้องการของลูกค้า พร้อมพัฒนาระบบบริหารคุณภาพอย่างต่อเนื่อง</p>
+        <div class="hero-date"><i class="fa fa-shield-halved"></i> นโยบายบริษัท (แสดงเมื่อไม่มีข่าวสารใหม่)</div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide" style="background:linear-gradient(130deg,#0F1059 0%,#7c3aed 100%)">
+      <div class="hero-content">
+        <span class="hero-tag" style="background:#fff;color:var(--navy)">Safety Update</span>
+        <h2>การฝึกซ้อมอพยพหนีไฟ ประจำปี 2569</h2>
+        <p>กำหนดการซ้อมอพยพหนีไฟประจำปีจะจัดขึ้นในวันที่ 15 พฤษภาคม 2569 เวลา 10:00 น. ขอให้ทุกท่านให้ความร่วมมือ</p>
+        <div class="hero-date"><i class="fa fa-fire-flame-curved"></i> 01 พฤษภาคม 2569 &nbsp;|&nbsp; ฝ่าย SAFETY</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero-arrow left"  onclick="slideHero(-1)"><i class="fa fa-chevron-left"></i></div>
+  <div class="hero-arrow right" onclick="slideHero(1)"><i class="fa fa-chevron-right"></i></div>
+
+  <div class="hero-dots" id="heroDots">
+    <span class="dot active" onclick="goSlide(0)"></span>
+    <span class="dot"        onclick="goSlide(1)"></span>
+    <span class="dot"        onclick="goSlide(2)"></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DEPARTMENT FILTER BAR
+══════════════════════════════════════ -->
+<div class="dept-bar" id="deptBarEl">
+  <span class="dept-chip active" onclick="filterDept(this,'all')">ทั้งหมด</span>
+  <span class="dept-chip" onclick="filterDept(this,'IT')">IT</span>
+  <span class="dept-chip" onclick="filterDept(this,'QA')">QA</span>
+  <span class="dept-chip" onclick="filterDept(this,'QMS')">QMS</span>
+  <span class="dept-chip" onclick="filterDept(this,'SAFETY')">SAFETY</span>
+  <span class="dept-chip" onclick="filterDept(this,'HR')">HR</span>
+  <span class="dept-chip" onclick="filterDept(this,'Procurement')">Procurement</span>
+  <span class="dept-chip" onclick="filterDept(this,'Finance')">Finance</span>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT (Home View)
+══════════════════════════════════════ -->
+<div id="home-view">
+  <div class="main-grid">
+
+    <!-- ─── LEFT COLUMN ─── -->
+    <div class="left-col">
+
+      <!-- News Card -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-newspaper"></i></span>
+            ข่าวสารทั้งหมด
+          </div>
+          <a href="#" class="card-head-link" onclick="navigate('news');return false">ดูทั้งหมด <i class="fa fa-arrow-right"></i></a>
+        </div>
+        <div class="card-body">
+          <div class="news-list">
+
+            <div class="news-item">
+              <div class="news-thumb">
+                <i class="fa fa-calendar-check"></i>
+              </div>
+              <div class="news-meta">
+                <h4>ประกาศวันหยุดนักขัตฤกษ์ประจำปี 2569</h4>
+                <p>บริษัทฯ ขอประกาศรายชื่อวันหยุดนักขัตฤกษ์และวันหยุดพิเศษประจำปี 2569 รวม 16 วัน โดยมีวันหยุดชดเชยเพิ่มเติม...</p>
+                <div class="news-footer">
+                  <span class="dept-tag">HR</span>
+                  <span class="date"><i class="fa fa-clock"></i> 06/05/2569</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="news-item">
+              <div class="news-thumb">
+                <i class="fa fa-fire-flame-curved"></i>
+              </div>
+              <div class="news-meta">
+                <h4>กำหนดการฝึกซ้อมอพยพหนีไฟประจำปี 2569</h4>
+                <p>ฝ่าย SAFETY ขอแจ้งกำหนดการซ้อมอพยพหนีไฟที่จะจัดขึ้นในวันที่ 15 พฤษภาคม 2569 เวลา 10:00 น.</p>
+                <div class="news-footer">
+                  <span class="dept-tag">SAFETY</span>
+                  <span class="date"><i class="fa fa-clock"></i> 01/05/2569</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="news-item">
+              <div class="news-thumb">
+                <i class="fa fa-file-shield"></i>
+              </div>
+              <div class="news-meta">
+                <h4>การปรับปรุงระบบ Document Control ครั้งใหม่</h4>
+                <p>ระบบ Document Control ได้รับการปรับปรุงให้รองรับ ISO 9001:2015 และ ISO 14001:2015 พร้อมกัน...</p>
+                <div class="news-footer">
+                  <span class="dept-tag">QMS</span>
+                  <span class="date"><i class="fa fa-clock"></i> 28/04/2569</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="news-item">
+              <div class="news-thumb">
+                <i class="fa fa-laptop-code"></i>
+              </div>
+              <div class="news-meta">
+                <h4>อัปเดตนโยบาย IT Security ประจำปี 2569</h4>
+                <p>ฝ่าย IT ขอแจ้งแนวปฏิบัติด้านความปลอดภัยทางไซเบอร์ฉบับปรับปรุง มีผลบังคับใช้ตั้งแต่ 1 พฤษภาคม 2569</p>
+                <div class="news-footer">
+                  <span class="dept-tag">IT</span>
+                  <span class="date"><i class="fa fa-clock"></i> 25/04/2569</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Registered Documents -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-file-circle-check"></i></span>
+            เอกสารขึ้นทะเบียนเปลี่ยนแปลงล่าสุด
+          </div>
+          <a href="#" class="card-head-link" onclick="navigate('docs');return false">ดูทั้งหมด <i class="fa fa-arrow-right"></i></a>
+        </div>
+        <div class="card-body">
+          <div class="doc-list">
+
+            <div class="doc-item">
+              <div class="doc-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">WI-IT-001 Work Instruction – Network Setup</div>
+                <div class="doc-sub">IT &nbsp;•&nbsp; Rev.5 &nbsp;•&nbsp; 06/05/2569</div>
+              </div>
+              <span class="badge new">New</span>
+            </div>
+
+            <div class="doc-item">
+              <div class="doc-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">QP-QMS-003 Quality Procedure – Corrective Action</div>
+                <div class="doc-sub">QMS &nbsp;•&nbsp; Rev.3 &nbsp;•&nbsp; 04/05/2569</div>
+              </div>
+              <span class="badge upd">Updated</span>
+            </div>
+
+            <div class="doc-item">
+              <div class="doc-icon doc"><i class="fa fa-file-word"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">HR-POL-005 HR Leave Policy 2569</div>
+                <div class="doc-sub">HR &nbsp;•&nbsp; Rev.2 &nbsp;•&nbsp; 01/05/2569</div>
+              </div>
+              <span class="badge rev">Rev</span>
+            </div>
+
+            <div class="doc-item">
+              <div class="doc-icon xls"><i class="fa fa-file-excel"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">SF-SAF-010 Safety Inspection Checklist</div>
+                <div class="doc-sub">SAFETY &nbsp;•&nbsp; Rev.1 &nbsp;•&nbsp; 28/04/2569</div>
+              </div>
+              <span class="badge new">New</span>
+            </div>
+
+            <div class="doc-item">
+              <div class="doc-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">QA-ITP-008 Inspection &amp; Test Plan</div>
+                <div class="doc-sub">QA &nbsp;•&nbsp; Rev.4 &nbsp;•&nbsp; 25/04/2569</div>
+              </div>
+              <span class="badge upd">Updated</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Internal Apps -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-th-large"></i></span>
+            แอปพลิเคชันภายใน
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="app-grid">
+
+            <div class="app-tile">
+              <div class="app-icon ic-blue"><i class="fa fa-clock"></i></div>
+              <span class="app-label">Time Attendance</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-green"><i class="fa fa-leaf"></i></div>
+              <span class="app-label">E-Leave</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-rose"><i class="fa fa-heart-pulse"></i></div>
+              <span class="app-label">Health Check</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-purple"><i class="fa fa-book-open"></i></div>
+              <span class="app-label">E-Learning</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-amber"><i class="fa fa-file-invoice"></i></div>
+              <span class="app-label">E-Request</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-teal"><i class="fa fa-shield-halved"></i></div>
+              <span class="app-label">Safety Report</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-sky"><i class="fa fa-envelope"></i></div>
+              <span class="app-label">Internal Mail</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-indigo"><i class="fa fa-chart-bar"></i></div>
+              <span class="app-label">KPI Dashboard</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-orange"><i class="fa fa-boxes-stacked"></i></div>
+              <span class="app-label">Inventory</span>
+            </div>
+            <div class="app-tile">
+              <div class="app-icon ic-navy"><i class="fa fa-ellipsis"></i></div>
+              <span class="app-label">ทั้งหมด</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /left-col -->
+
+    <!-- ─── RIGHT COLUMN ─── -->
+    <div class="right-col">
+
+      <!-- Calendar Widget -->
+      <div class="card cal-widget">
+        <div class="cal-header">
+          <span class="cal-title">ปฏิทินบริษัท – พฤษภาคม 2569</span>
+          <div class="cal-nav">
+            <button><i class="fa fa-chevron-left"></i></button>
+            <button><i class="fa fa-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-days-header">
+            <span>อา</span><span>จ</span><span>อ</span><span>พ</span>
+            <span>พฤ</span><span>ศ</span><span>ส</span>
+          </div>
+          <div class="cal-body" id="calBody">
+            <!-- JS fills this -->
+          </div>
+        </div>
+        <div class="cal-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--navy)"></div> วันนี้</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div> วันหยุด</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div> กิจกรรม</div>
+        </div>
+      </div>
+
+      <!-- Recent Documents -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-clock-rotate-left"></i></span>
+            เอกสารล่าสุด
+          </div>
+          <a href="#" class="card-head-link">ดูเพิ่ม</a>
+        </div>
+        <div class="card-body">
+          <div class="doc-list">
+
+            <div class="mini-doc">
+              <div class="mini-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="mini-info">
+                <div class="mini-name">Quality_Manual_V5.pdf</div>
+                <div class="mini-date">06/05/2569 &nbsp;•&nbsp; QMS</div>
+              </div>
+            </div>
+            <div class="mini-doc">
+              <div class="mini-icon doc"><i class="fa fa-file-word"></i></div>
+              <div class="mini-info">
+                <div class="mini-name">HR_Policy_2569.docx</div>
+                <div class="mini-date">04/05/2569 &nbsp;•&nbsp; HR</div>
+              </div>
+            </div>
+            <div class="mini-doc">
+              <div class="mini-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="mini-info">
+                <div class="mini-name">Safety_Rules_2569.pdf</div>
+                <div class="mini-date">01/05/2569 &nbsp;•&nbsp; SAFETY</div>
+              </div>
+            </div>
+            <div class="mini-doc">
+              <div class="mini-icon xls"><i class="fa fa-file-excel"></i></div>
+              <div class="mini-info">
+                <div class="mini-name">Inspection_Checklist_Apr.xlsx</div>
+                <div class="mini-date">28/04/2569 &nbsp;•&nbsp; QA</div>
+              </div>
+            </div>
+            <div class="mini-doc">
+              <div class="mini-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="mini-info">
+                <div class="mini-name">IT_Security_Policy_2569.pdf</div>
+                <div class="mini-date">25/04/2569 &nbsp;•&nbsp; IT</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Org Chart Preview -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-building"></i></span>
+            โครงสร้างองค์กร
+          </div>
+          <a href="#" class="card-head-link" onclick="navigate('org');return false">ดูเต็ม <i class="fa fa-arrow-right"></i></a>
+        </div>
+        <div class="card-body" style="padding-bottom:18px">
+          <div class="org-preview">
+            <div class="org-node">
+              <div class="org-box">กรรมการผู้จัดการ</div>
+              <div class="org-connector"></div>
+            </div>
+            <div class="org-row" style="--span-w:320px">
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box mid">ฝ่ายผลิต</div>
+              </div>
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box mid">ฝ่ายสนับสนุน</div>
+              </div>
+            </div>
+            <div class="org-row" style="--span-w:380px; padding-top:14px">
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box leaf">QA</div>
+              </div>
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box leaf">IT</div>
+              </div>
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box leaf">HR</div>
+              </div>
+              <div class="org-sub">
+                <div class="org-connector"></div>
+                <div class="org-box leaf">SAFETY</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-address-card"></i></span>
+            ช่องทางการติดต่อ
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="contact-list">
+            <div class="contact-row">
+              <div class="ci"><i class="fa fa-phone"></i></div>
+              <div>
+                <div class="cv">02-XXX-XXXX ต่อ 101</div>
+                <div class="cl">สายตรง Document Control</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci"><i class="fa fa-envelope"></i></div>
+              <div>
+                <div class="cv">doccontrol@ndc-industrial.com</div>
+                <div class="cl">อีเมลหลักสำหรับเอกสาร</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci ic-sky" style="background:#e0f2fe;color:#0284c7"><i class="fa fa-headset"></i></div>
+              <div>
+                <div class="cv">IT Helpdesk: ext. 200</div>
+                <div class="cl">it-helpdesk@ndc-industrial.com</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci ic-rose" style="background:#ffe4e6;color:#e11d48"><i class="fa fa-shield-halved"></i></div>
+              <div>
+                <div class="cv">SAFETY: ext. 301</div>
+                <div class="cl">safety@ndc-industrial.com</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci ic-green" style="background:#dcfce7;color:#16a34a"><i class="fa fa-users"></i></div>
+              <div>
+                <div class="cv">HR: ext. 150</div>
+                <div class="cl">hr@ndc-industrial.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /right-col -->
+  </div><!-- /main-grid -->
+</div><!-- /home-view -->
+
+<!-- ══════════════════════════════════════
+     DEPARTMENT VIEW (shown when dept selected)
+══════════════════════════════════════ -->
+<div id="dept-view">
+
+  <!-- ── Top nav bar (breadcrumb stays same) ── -->
+  <div class="dept-view-head">
+    <button class="dept-back" onclick="navigate('home')">
+      <i class="fa fa-arrow-left"></i> กลับหน้าหลัก
+    </button>
+    <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.55);font-size:.85rem">
+      <span style="cursor:pointer" onclick="navigate('home')">หน้าหลัก</span>
+      <i class="fa fa-chevron-right" style="font-size:.65rem"></i>
+      <span style="color:rgba(255,255,255,.7)">แผนก</span>
+      <i class="fa fa-chevron-right" style="font-size:.65rem"></i>
+      <span style="color:#fff;font-weight:700" id="dept-view-title">Document Control</span>
+    </div>
+  </div>
+
+  <!-- ── Workflow Steps Bar ── -->
+  <div class="workflow-bar">
+    <div class="wf-step active" onclick="setWfStep(this,0)">
+      <div class="wf-num">1</div>
+      <div class="wf-label">ขั้นตอนการขึ้น<br>ทะเบียน/แก้ไข<br>เอกสาร</div>
+    </div>
+    <div class="wf-arrow"><i class="fa fa-chevron-right"></i></div>
+    <div class="wf-step" onclick="setWfStep(this,1)">
+      <div class="wf-num">2</div>
+      <div class="wf-label">ขั้นตอนการ<br>ทบทวนเอกสาร</div>
+    </div>
+    <div class="wf-arrow"><i class="fa fa-chevron-right"></i></div>
+    <div class="wf-step" onclick="setWfStep(this,2)">
+      <div class="wf-num">3</div>
+      <div class="wf-label">ขั้นตอนการ<br>ยกเลิกเอกสาร</div>
+    </div>
+    <div class="wf-arrow"><i class="fa fa-chevron-right"></i></div>
+    <div class="wf-step" onclick="setWfStep(this,3)">
+      <div class="wf-num">4</div>
+      <div class="wf-label">ขั้นตอนการขอ<br>สำเนาเอกสาร<br>เพิ่มเติม/ทดแทน</div>
+    </div>
+    <div class="wf-arrow"><i class="fa fa-chevron-right"></i></div>
+    <div class="wf-step" onclick="setWfStep(this,4)">
+      <div class="wf-num">5</div>
+      <div class="wf-label">ขั้นตอนการ<br>ทำลายเอกสาร/<br>จัดเก็บ</div>
+    </div>
+  </div>
+
+  <!-- ── Dept News Banner (scrollable marquee style) ── -->
+  <div class="dept-news-banner">
+    <div class="dept-news-inner">
+      <span class="dept-news-tag"><i class="fa fa-bullhorn"></i> ข่าวสารประชาสัมพันธ์</span>
+      <div class="dept-news-scroll">
+        <span id="dept-news-head">ข่าวสารประชาสัมพันธ์ของ QMS — อัปเดตเอกสาร QP-QMS-003 Rev.3 แล้ว | กำหนดการตรวจ Internal Audit Q2/2569: 20–22 พฤษภาคม 2569</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Department Sub-Grid ── -->
+  <div class="dept-body">
+
+    <!-- Sub-dept cards (3 per row, matching screenshot) -->
+    <div class="dept-section-head">
+      <span class="icon"><i class="fa fa-sitemap"></i></span>
+      <span>แผนกที่เกี่ยวข้อง</span>
+    </div>
+    <div class="dept-card-grid3" id="dept-sub-grid">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Dept docs + contact row -->
+    <div class="dept-bottom-grid">
+
+      <!-- Recent docs -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-folder-open"></i></span>
+            เอกสารของแผนก
+          </div>
+          <a href="#" class="card-head-link">ดูทั้งหมด <i class="fa fa-arrow-right"></i></a>
+        </div>
+        <div class="card-body">
+          <div class="doc-list" id="dept-doc-list">
+            <div class="doc-item">
+              <div class="doc-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">QP-001 Quality Procedure Rev.5</div>
+                <div class="doc-sub">อัปเดต 06/05/2569</div>
+              </div>
+              <span class="badge new">New</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon doc"><i class="fa fa-file-word"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">QP-002 Document Control Procedure Rev.3</div>
+                <div class="doc-sub">อัปเดต 01/05/2569</div>
+              </div>
+              <span class="badge upd">Updated</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon xls"><i class="fa fa-file-excel"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">FR-001 Non-Conformance Report Form</div>
+                <div class="doc-sub">อัปเดต 25/04/2569</div>
+              </div>
+              <span class="badge rev">Rev</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon pdf"><i class="fa fa-file-pdf"></i></div>
+              <div class="doc-info">
+                <div class="doc-name">WI-DC-003 Document Numbering Instruction</div>
+                <div class="doc-sub">อัปเดต 20/04/2569</div>
+              </div>
+              <span class="badge upd">Updated</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact sidebar -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">
+            <span class="icon"><i class="fa fa-address-card"></i></span>
+            ติดต่อแผนก
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="contact-list">
+            <div class="contact-row">
+              <div class="ci"><i class="fa fa-user-tie"></i></div>
+              <div>
+                <div class="cv" id="dept-head-name">หัวหน้าแผนก</div>
+                <div class="cl">Department Head</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci"><i class="fa fa-phone"></i></div>
+              <div>
+                <div class="cv">02-XXX-XXXX ต่อ 200</div>
+                <div class="cl">โทรศัพท์ภายใน</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci"><i class="fa fa-envelope"></i></div>
+              <div>
+                <div class="cv" id="dept-email">dept@ndc-industrial.com</div>
+                <div class="cl">อีเมลแผนก</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="ci ic-sky" style="background:#e0f2fe;color:#0284c7"><i class="fa fa-clock"></i></div>
+              <div>
+                <div class="cv">จ–ศ: 08:00–17:00</div>
+                <div class="cl">เวลาทำการ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dept-bottom-grid -->
+  </div><!-- /dept-body -->
+
+</div><!-- /dept-view -->
+
+<!-- ══════════════════════════════════════
+     DOC-TYPE VIEW  (Document Control → Dept → SOP/Procedure/SIP/FM/WI)
+══════════════════════════════════════ -->
+<div id="doctype-view">
+
+  <!-- Header with 3-level breadcrumb -->
+  <div class="page-header">
+    <div class="page-breadcrumb">
+      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-home" onclick="navigate('dept','Document Control')">Document Control</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-current" id="dt-breadcrumb-dept">IT</span>
+    </div>
+    <div class="page-header-inner">
+      <div>
+        <div class="page-title"><i class="fa fa-folder-open"></i> <span id="dt-page-title">IT — เอกสารทั้งหมด</span></div>
+        <div class="page-subtitle" id="dt-page-sub">SOP · Procedure · SIP · FM · WI และเอกสารอื่นๆ ของฝ่าย IT</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="page-back-btn" onclick="navigate('dept','Document Control')">
+          <i class="fa fa-arrow-left"></i> กลับ Document Control
+        </button>
+        <button class="page-back-btn" onclick="navigate('home')" style="background:rgba(255,255,255,.08)">
+          <i class="fa fa-house"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- Doc-type category cards -->
+    <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">
+      ประเภทเอกสาร
+    </div>
+    <div class="doctype-grid" id="dt-type-grid">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Document table -->
+    <div class="doctype-table-card">
+      <div class="doctype-table-head">
+        <div class="doctype-table-title">
+          <span class="icon"><i class="fa fa-list"></i></span>
+          <span id="dt-table-title">เอกสารทั้งหมด</span>
+          <span class="badge upd" id="dt-table-count" style="font-size:.7rem">–</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="doctype-search">
+            <i class="fa fa-magnifying-glass"></i>
+            <input type="text" id="dt-search-input" placeholder="ค้นหาเลขที่ / ชื่อเอกสาร…" oninput="filterDocTable()">
+          </div>
+          <select id="dt-rev-filter" onchange="filterDocTable()" style="padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Sarabun',sans-serif;font-size:.8rem;background:#fff;color:var(--text)">
+            <option value="">ทุก Rev.</option>
+            <option value="new">New</option>
+            <option value="upd">Updated</option>
+            <option value="rev">Revised</option>
+          </select>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="docs-table" id="dt-doc-table">
+          <thead>
+            <tr>
+              <th style="width:130px">เลขที่เอกสาร</th>
+              <th>ชื่อเอกสาร</th>
+              <th style="width:110px">ประเภท</th>
+              <th style="width:60px">Rev.</th>
+              <th style="width:110px">วันที่อัปเดต</th>
+              <th style="width:80px">สถานะ</th>
+              <th style="width:110px"></th>
+            </tr>
+          </thead>
+          <tbody id="dt-table-body">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: ข่าวสาร
+══════════════════════════════════════ -->
+<div id="news-view" class="page-view">
+  <div class="page-header">
+    <div class="page-breadcrumb">
+      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-current">ข่าวสารทั้งหมด</span>
+    </div>
+    <div class="page-header-inner">
+      <div>
+        <div class="page-title"><i class="fa fa-newspaper"></i> ข่าวสารทั้งหมด</div>
+        <div class="page-subtitle">ประกาศ ข่าวสาร และกิจกรรมภายในองค์กร</div>
+      </div>
+      <button class="page-back-btn" onclick="navigate('home')"><i class="fa fa-arrow-left"></i> กลับหน้าหลัก</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="news-filter-row">
+      <div class="search-box"><i class="fa fa-magnifying-glass"></i><input type="text" placeholder="ค้นหาข่าวสาร…"></div>
+      <span class="filter-chip active" onclick="setChip(this)">ทั้งหมด</span>
+      <span class="filter-chip" onclick="setChip(this)">HR</span>
+      <span class="filter-chip" onclick="setChip(this)">IT</span>
+      <span class="filter-chip" onclick="setChip(this)">QMS</span>
+      <span class="filter-chip" onclick="setChip(this)">SAFETY</span>
+    </div>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-card-img"><i class="fa fa-calendar-check"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">HR</span>
+          <div class="news-card-title">ประกาศวันหยุดนักขัตฤกษ์ประจำปี 2569</div>
+          <div class="news-card-excerpt">บริษัทฯ ขอประกาศรายชื่อวันหยุดนักขัตฤกษ์และวันหยุดพิเศษประจำปี 2569 รวม 16 วัน โดยมีวันหยุดชดเชยเพิ่มเติม</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 06/05/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-img" style="background:linear-gradient(135deg,#7c3aed,#0F1059)"><i class="fa fa-fire-flame-curved"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">SAFETY</span>
+          <div class="news-card-title">กำหนดการฝึกซ้อมอพยพหนีไฟประจำปี 2569</div>
+          <div class="news-card-excerpt">ฝ่าย SAFETY ขอแจ้งกำหนดการซ้อมอพยพหนีไฟที่จะจัดขึ้นในวันที่ 15 พฤษภาคม 2569 เวลา 10:00 น. ขอให้ทุกท่านให้ความร่วมมือ</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 01/05/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-img" style="background:linear-gradient(135deg,#0f766e,#1d6a8a)"><i class="fa fa-file-shield"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">QMS</span>
+          <div class="news-card-title">การปรับปรุงระบบ Document Control ครั้งใหม่</div>
+          <div class="news-card-excerpt">ระบบ Document Control ได้รับการปรับปรุงให้รองรับ ISO 9001:2015 และ ISO 14001:2015 พร้อมกัน</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 28/04/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-img" style="background:linear-gradient(135deg,#0284c7,#0F1059)"><i class="fa fa-laptop-code"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">IT</span>
+          <div class="news-card-title">อัปเดตนโยบาย IT Security ประจำปี 2569</div>
+          <div class="news-card-excerpt">ฝ่าย IT ขอแจ้งแนวปฏิบัติด้านความปลอดภัยทางไซเบอร์ฉบับปรับปรุง มีผลบังคับใช้ตั้งแต่ 1 พฤษภาคม 2569</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 25/04/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-img" style="background:linear-gradient(135deg,#16a34a,#0f766e)"><i class="fa fa-users"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">HR</span>
+          <div class="news-card-title">ระบบ HR Self-Service เปิดให้บริการแล้ว</div>
+          <div class="news-card-excerpt">พนักงานสามารถยื่นคำร้องขอลา ตรวจสอบสลิปเงินเดือน และแก้ไขข้อมูลส่วนตัวได้ด้วยตนเองผ่านระบบออนไลน์</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 20/04/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-img" style="background:linear-gradient(135deg,#d97706,#0F1059)"><i class="fa fa-star"></i></div>
+        <div class="news-card-body">
+          <span class="news-card-tag">QA</span>
+          <div class="news-card-title">ผลการตรวจ Customer Satisfaction Survey Q1/2569</div>
+          <div class="news-card-excerpt">ผลสำรวจความพึงพอใจของลูกค้าไตรมาส 1/2569 ได้คะแนนเฉลี่ย 4.6/5 ซึ่งสูงกว่าเป้าหมายที่ตั้งไว้ที่ 4.2</div>
+          <div class="news-card-footer"><span><i class="fa fa-clock"></i> 15/04/2569</span><span>อ่านต่อ <i class="fa fa-arrow-right"></i></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: เอกสารทั้งหมด
+══════════════════════════════════════ -->
+<div id="docs-view" class="page-view">
+  <div class="page-header">
+    <div class="page-breadcrumb">
+      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-current">เอกสารทั้งหมด</span>
+    </div>
+    <div class="page-header-inner">
+      <div>
+        <div class="page-title"><i class="fa fa-folder-open"></i> เอกสารทั้งหมด</div>
+        <div class="page-subtitle">คลังเอกสารขึ้นทะเบียน – สามารถกรองตามแผนกและประเภทเอกสาร</div>
+      </div>
+      <button class="page-back-btn" onclick="navigate('home')"><i class="fa fa-arrow-left"></i> กลับหน้าหลัก</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="docs-layout">
+      <!-- Sidebar -->
+      <div class="docs-sidebar">
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 14px 8px">แผนก</div>
+        <div class="docs-sidebar-item active" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-layer-group"></i></div> ทั้งหมด <span class="docs-sidebar-count">47</span>
+        </div>
+        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-certificate"></i></div> QMS <span class="docs-sidebar-count">15</span>
+        </div>
+        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-magnifying-glass-chart"></i></div> QA <span class="docs-sidebar-count">10</span>
+        </div>
+        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-laptop-code"></i></div> IT <span class="docs-sidebar-count">8</span>
+        </div>
+        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-helmet-safety"></i></div> SAFETY <span class="docs-sidebar-count">7</span>
+        </div>
+        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
+          <div class="ds-icon"><i class="fa fa-users"></i></div> HR <span class="docs-sidebar-count">7</span>
+        </div>
+      </div>
+      <!-- Table -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="search-box" style="flex:1;min-width:180px;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;gap:8px;font-size:.85rem;color:var(--muted)">
+            <i class="fa fa-magnifying-glass"></i><input type="text" placeholder="ค้นหาเลขที่/ชื่อเอกสาร…" style="border:none;outline:none;font-family:'Sarabun',sans-serif;font-size:.85rem;width:100%">
+          </div>
+          <select style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:.82rem;color:var(--text);background:#fff">
+            <option>ทุกประเภท</option><option>Procedure</option><option>Work Instruction</option><option>Form</option><option>Policy</option>
+          </select>
+          <select style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:.82rem;color:var(--text);background:#fff">
+            <option>เรียงตาม: ล่าสุด</option><option>ชื่อ A–Z</option><option>Rev สูงสุด</option>
+          </select>
+        </div>
+        <div class="card docs-table-wrap">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>เลขที่เอกสาร</th>
+                <th>ชื่อเอกสาร</th>
+                <th>แผนก</th>
+                <th>ประเภท</th>
+                <th>Rev.</th>
+                <th>วันที่อัปเดต</th>
+                <th>สถานะ</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>WI-IT-001</td><td>Work Instruction – Network Setup</td><td>IT</td><td>WI</td><td>5</td><td>06/05/2569</td><td><span class="badge new">New</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>QP-QMS-003</td><td>Quality Procedure – Corrective Action</td><td>QMS</td><td>Procedure</td><td>3</td><td>04/05/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>HR-POL-005</td><td>HR Leave Policy 2569</td><td>HR</td><td>Policy</td><td>2</td><td>01/05/2569</td><td><span class="badge rev">Rev</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>SF-SAF-010</td><td>Safety Inspection Checklist</td><td>SAFETY</td><td>Form</td><td>1</td><td>28/04/2569</td><td><span class="badge new">New</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>QA-ITP-008</td><td>Inspection &amp; Test Plan</td><td>QA</td><td>Procedure</td><td>4</td><td>25/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>QP-QMS-001</td><td>Quality Manual ISO 9001:2015</td><td>QMS</td><td>Manual</td><td>5</td><td>20/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>WI-DC-003</td><td>Document Numbering Instruction</td><td>QMS</td><td>WI</td><td>4</td><td>18/04/2569</td><td><span class="badge rev">Rev</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+              <tr><td>FR-QA-012</td><td>Non-Conformance Report Form</td><td>QA</td><td>Form</td><td>3</td><td>15/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: โครงสร้างองค์กร
+══════════════════════════════════════ -->
+<div id="org-view" class="page-view">
+  <div class="page-header">
+    <div class="page-breadcrumb">
+      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-current">โครงสร้างองค์กร</span>
+    </div>
+    <div class="page-header-inner">
+      <div>
+        <div class="page-title"><i class="fa fa-building"></i> โครงสร้างองค์กร</div>
+        <div class="page-subtitle">NDC Industrial Company Limited – แผนผังการจัดการองค์กร</div>
+      </div>
+      <button class="page-back-btn" onclick="navigate('home')"><i class="fa fa-arrow-left"></i> กลับหน้าหลัก</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="card" style="padding:28px">
+      <div class="org-full-wrap">
+        <div class="org-chart-full">
+
+          <!-- CEO -->
+          <div class="oc-node">
+            <div class="oc-box ceo">กรรมการผู้จัดการ<br><span style="font-size:.72rem;opacity:.75;font-weight:400">Managing Director</span></div>
+            <div class="oc-line-v"></div>
+          </div>
+
+          <!-- VP Row -->
+          <div class="oc-level" style="gap:40px">
+            <div class="oc-node">
+              <div class="oc-line-v"></div>
+              <div class="oc-box vp" onclick="navigate('dept','QMS')">ฝ่าย QMS</div>
+            </div>
+            <div class="oc-node">
+              <div class="oc-line-v"></div>
+              <div class="oc-box vp" onclick="navigate('dept','IT')">ฝ่าย IT</div>
+            </div>
+            <div class="oc-node">
+              <div class="oc-line-v"></div>
+              <div class="oc-box vp" onclick="navigate('dept','QA')">ฝ่าย QA</div>
+            </div>
+            <div class="oc-node">
+              <div class="oc-line-v"></div>
+              <div class="oc-box vp" onclick="navigate('dept','SAFETY')">ฝ่าย Safety</div>
+            </div>
+            <div class="oc-node">
+              <div class="oc-line-v"></div>
+              <div class="oc-box vp" onclick="navigate('dept','HR')">ฝ่าย HR</div>
+            </div>
+          </div>
+
+          <!-- Manager Row -->
+          <div class="oc-level" style="gap:12px;margin-top:22px">
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Doc Control</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Internal Audit</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Network</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Software</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Incoming QC</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">In-Process QC</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Fire Safety</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Training</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Recruitment</div></div>
+            <div class="oc-node"><div class="oc-line-v"></div><div class="oc-box mgr">Payroll</div></div>
+          </div>
+
+        </div>
+      </div>
+      <p style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:16px">คลิกที่ฝ่ายเพื่อดูรายละเอียดแผนก</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: ช่องทางติดต่อ
+══════════════════════════════════════ -->
+<div id="contact-view" class="page-view">
+  <div class="page-header">
+    <div class="page-breadcrumb">
+      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
+      <i class="fa fa-chevron-right"></i>
+      <span class="bc-current">ช่องทางการติดต่อ</span>
+    </div>
+    <div class="page-header-inner">
+      <div>
+        <div class="page-title"><i class="fa fa-address-card"></i> ช่องทางการติดต่อ</div>
+        <div class="page-subtitle">ข้อมูลการติดต่อแต่ละฝ่าย — เวลาทำการ จ–ศ 08:00–17:00</div>
+      </div>
+      <button class="page-back-btn" onclick="navigate('home')"><i class="fa fa-arrow-left"></i> กลับหน้าหลัก</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="contact-page-grid">
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head">
+          <div class="cd-icon"><i class="fa fa-folder-open"></i></div>
+          <div class="cd-name">Document Control</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณสมชาย มีสุข</span><div class="sub">Document Control Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 101</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>doccontrol@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head" style="background:var(--teal)">
+          <div class="cd-icon"><i class="fa fa-laptop-code"></i></div>
+          <div class="cd-name">IT Department</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณวิชัย รักงาน</span><div class="sub">IT Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 200</span></div>
+          <div class="contact-detail-row"><i class="fa fa-headset"></i><span>IT Helpdesk ต่อ 201</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>it@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head" style="background:#d97706">
+          <div class="cd-icon"><i class="fa fa-certificate"></i></div>
+          <div class="cd-name">QMS Department</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณประภาส คุณภาพ</span><div class="sub">QMS Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 250</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>qms@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head" style="background:#0284c7">
+          <div class="cd-icon"><i class="fa fa-magnifying-glass-chart"></i></div>
+          <div class="cd-name">QA Department</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณนภา ตรวจสอบ</span><div class="sub">QA Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 280</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>qa@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head" style="background:#e11d48">
+          <div class="cd-icon"><i class="fa fa-helmet-safety"></i></div>
+          <div class="cd-name">Safety Department</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณสมปอง ปลอดภัย</span><div class="sub">Safety Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 301</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>safety@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+      <div class="contact-dept-card">
+        <div class="contact-dept-head" style="background:#16a34a">
+          <div class="cd-icon"><i class="fa fa-users"></i></div>
+          <div class="cd-name">HR Department</div>
+        </div>
+        <div class="contact-dept-body">
+          <div class="contact-detail-row"><i class="fa fa-user-tie"></i><div><span>คุณนารี ดูแลคน</span><div class="sub">HR Manager</div></div></div>
+          <div class="contact-detail-row"><i class="fa fa-phone"></i><span>02-XXX-XXXX ต่อ 150</span></div>
+          <div class="contact-detail-row"><i class="fa fa-envelope"></i><span>hr@ndc-industrial.com</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Company address card -->
+    <div class="contact-map-card">
+      <div class="card-head">
+        <div class="card-head-title"><span class="icon"><i class="fa fa-location-dot"></i></span> ที่ตั้งบริษัท</div>
+      </div>
+      <div class="contact-map-placeholder">
+        <i class="fa fa-map-location-dot"></i>
+        <p>123 ถนนอุตสาหกรรม นิคมอุตสาหกรรม จ.ชลบุรี 20000 &nbsp;|&nbsp; โทร. 02-XXX-XXXX &nbsp;|&nbsp; แฟกซ์ 02-XXX-XXXX</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div style="display:flex;align-items:center;gap:14px">
+    <img src="Logo.png" alt="NDC Industrial" style="height:28px;width:auto;filter:brightness(0) invert(1);opacity:.85">
+    <div>
+      <div style="color:#fff;font-weight:700;font-size:.88rem">NDC INDUSTRIAL COMPANY LIMITED</div>
+      <div style="margin-top:3px;font-size:.75rem">© 2569 บริษัท เอ็นดีซี อินดัสเทรียล จำกัด &nbsp;|&nbsp; Company Center v1.0</div>
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="#">นโยบายความเป็นส่วนตัว</a>
+    <a href="#">เงื่อนไขการใช้งาน</a>
+    <a href="#">ติดต่อ IT Support</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+  /* ══════════════════════════════
+     NAVIGATION SYSTEM
+  ══════════════════════════════ */
+
+  /* ══════════════════════════════
+     NAVIGATION SYSTEM
+  ══════════════════════════════ */
+
+  const NAV_MAP = {
+    home: null, news: 'nav-news', docs: 'nav-docs',
+    org: 'nav-org', contact: 'nav-contact', dept: 'nav-dept', doctype: 'nav-dept'
+  };
+
+  function navigate(view, param) {
+    // Hide everything
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('dept-view').classList.remove('visible');
+    document.getElementById('doctype-view').classList.remove('visible');
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('visible'));
+
+    // Hero / marquee / dept-bar only on home
+    const isHome = view === 'home';
+    ['heroWrap','marqueeBarEl','deptBarEl'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = isHome ? '' : 'none';
+    });
+
+    // Active nav highlight
+    document.querySelectorAll('#topbarNav > li').forEach(li => li.classList.remove('nav-active'));
+    const navId = NAV_MAP[view];
+    if (navId) document.getElementById(navId)?.classList.add('nav-active');
+
+    if (view === 'home') {
+      document.getElementById('home-view').style.display = '';
+
+    } else if (view === 'dept') {
+      loadDeptView(param || 'Document Control');
+      document.getElementById('dept-view').classList.add('visible');
+
+    } else if (view === 'doctype') {
+      // param = { dept, type }  e.g. { dept:'IT', type:'SOP' }
+      loadDocTypeView(param.dept, param.type || null);
+      document.getElementById('doctype-view').classList.add('visible');
+
+    } else {
+      const el = document.getElementById(view + '-view');
+      if (el) el.classList.add('visible');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ─── Hero Slider ─── */
+  let currentSlide = 0;
+  const totalSlides = 3;
+
+  function goSlide(n) {
+    currentSlide = n;
+    document.getElementById('heroSlides').style.transform = `translateX(-${n * 100}%)`;
+    document.querySelectorAll('.hero-dots .dot').forEach((d, i) => d.classList.toggle('active', i === n));
+  }
+  function slideHero(dir) { goSlide((currentSlide + dir + totalSlides) % totalSlides); }
+  setInterval(() => slideHero(1), 5000);
+
+  /* ─── Calendar ─── */
+  function buildCalendar() {
+    const body = document.getElementById('calBody');
+    const holidays = [1, 5, 12];
+    const events   = [6, 15, 20];
+    const today    = 6;
+    body.innerHTML = '';
+    const offset = 5; // May 2569 starts Friday
+    for (let i = 0; i < offset; i++) {
+      const b = document.createElement('div');
+      b.className = 'cal-day other-month';
+      body.appendChild(b);
+    }
+    for (let d = 1; d <= 31; d++) {
+      const el = document.createElement('div');
+      const dow = (offset + d - 1) % 7;
+      let cls = 'cal-day';
+      if (dow === 0) cls += ' sunday';
+      if (dow === 6) cls += ' saturday';
+      if (holidays.includes(d)) cls += ' holiday';
+      if (events.includes(d))   cls += ' work-marked';
+      if (d === today)           cls += ' today';
+      el.className = cls;
+      el.textContent = d;
+      body.appendChild(el);
+    }
+  }
+  buildCalendar();
+
+  /* ─── Dept filter chips (home) ─── */
+  function filterDept(el, dept) {
+    document.querySelectorAll('.dept-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── Workflow step ─── */
+  function setWfStep(el) {
+    document.querySelectorAll('.wf-step').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── News page filter chips ─── */
+  function setChip(el) {
+    el.closest('.news-filter-row').querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── Docs sidebar ─── */
+  function setDocSidebar(el) {
+    document.querySelectorAll('.docs-sidebar-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── Department data & renderer ─── */
+  const deptData = {
+    'Document Control': {
+      sub: [
+        { name:'IT',          icon:'fa-laptop-code',            count:'12 เอกสาร' },
+        { name:'QA',          icon:'fa-magnifying-glass-chart', count:'8 เอกสาร'  },
+        { name:'QMS',         icon:'fa-certificate',            count:'15 เอกสาร' },
+        { name:'SAFETY',      icon:'fa-helmet-safety',          count:'10 เอกสาร' },
+        { name:'HR',          icon:'fa-users',                  count:'7 เอกสาร'  },
+        { name:'Procurement', icon:'fa-truck',                  count:'5 เอกสาร'  },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ Document Control — เอกสาร WI-DC-003 Rev.4 เผยแพร่แล้ว | ขั้นตอนการขึ้นทะเบียนเอกสารฉบับปรับปรุงมีผลบังคับ 1 มิ.ย. 2569',
+      head: 'คุณสมชาย มีสุข', email: 'doccontrol@ndc-industrial.com'
+    },
+    'IT': {
+      sub: [
+        { name:'Network',  icon:'fa-network-wired',  count:'8 เอกสาร'  },
+        { name:'Software', icon:'fa-code',            count:'12 เอกสาร' },
+        { name:'Hardware', icon:'fa-server',          count:'6 เอกสาร'  },
+        { name:'Helpdesk', icon:'fa-headset',         count:'3 เอกสาร'  },
+        { name:'Security', icon:'fa-shield-halved',   count:'9 เอกสาร'  },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ IT — นโยบาย IT Security 2569 มีผลบังคับแล้ว | อัปเดต VPN Client เวอร์ชัน 5.2 ก่อน 15 พ.ค. 2569',
+      head: 'คุณวิชัย รักงาน', email: 'it@ndc-industrial.com'
+    },
+    'QMS': {
+      sub: [
+        { name:'Document Control', icon:'fa-folder',               count:'20 เอกสาร' },
+        { name:'Internal Audit',   icon:'fa-clipboard-check',      count:'5 เอกสาร'  },
+        { name:'Mgmt Review',      icon:'fa-chart-pie',            count:'3 เอกสาร'  },
+        { name:'CAPA',             icon:'fa-rotate',               count:'7 เอกสาร'  },
+        { name:'Risk Mgmt',        icon:'fa-triangle-exclamation', count:'4 เอกสาร'  },
+        { name:'Customer Sat.',    icon:'fa-star',                 count:'2 เอกสาร'  },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ QMS — QP-QMS-003 Rev.3 เผยแพร่แล้ว | Internal Audit Q2 วันที่ 20–22 พ.ค. 2569',
+      head: 'คุณประภาส คุณภาพ', email: 'qms@ndc-industrial.com'
+    },
+    'QA': {
+      sub: [
+        { name:'Incoming QC',   icon:'fa-box-open',       count:'6 เอกสาร'  },
+        { name:'In-Process QC', icon:'fa-gears',          count:'10 เอกสาร' },
+        { name:'Final QC',      icon:'fa-check-double',   count:'8 เอกสาร'  },
+        { name:'Calibration',   icon:'fa-ruler-combined', count:'5 เอกสาร'  },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ QA — ITP แผนการตรวจสอบ Q2/2569 เผยแพร่แล้ว',
+      head: 'คุณนภา ตรวจสอบ', email: 'qa@ndc-industrial.com'
+    },
+    'SAFETY': {
+      sub: [
+        { name:'Fire Safety', icon:'fa-fire-flame-curved', count:'8 เอกสาร' },
+        { name:'PPE',         icon:'fa-hard-hat',          count:'4 เอกสาร' },
+        { name:'Chemical',    icon:'fa-flask',             count:'6 เอกสาร' },
+        { name:'Emergency',   icon:'fa-truck-medical',     count:'3 เอกสาร' },
+        { name:'Training',    icon:'fa-person-walking',    count:'5 เอกสาร' },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ SAFETY — ซ้อมอพยพหนีไฟ 15 พ.ค. 2569 เวลา 10:00 น.',
+      head: 'คุณสมปอง ปลอดภัย', email: 'safety@ndc-industrial.com'
+    },
+    'HR': {
+      sub: [
+        { name:'Recruitment', icon:'fa-user-plus',   count:'4 เอกสาร' },
+        { name:'Training',    icon:'fa-book-open',   count:'9 เอกสาร' },
+        { name:'Payroll',     icon:'fa-money-check', count:'3 เอกสาร' },
+        { name:'Welfare',     icon:'fa-heart',       count:'6 เอกสาร' },
+        { name:'Performance', icon:'fa-chart-line',  count:'5 เอกสาร' },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของ HR — ประกาศวันหยุดประจำปี 2569 | ระบบ E-Leave เปิดให้บริการแล้ว',
+      head: 'คุณนารี ดูแลคน', email: 'hr@ndc-industrial.com'
+    },
+    default: {
+      sub: [
+        { name:'Section A', icon:'fa-folder', count:'5 เอกสาร' },
+        { name:'Section B', icon:'fa-folder', count:'5 เอกสาร' },
+        { name:'Section C', icon:'fa-folder', count:'5 เอกสาร' },
+      ],
+      news: 'ข่าวสารประชาสัมพันธ์ของแผนก',
+      head: 'หัวหน้าแผนก', email: 'dept@ndc-industrial.com'
+    }
+  };
+
+  function loadDeptView(name) {
+    const data = deptData[name] || deptData.default;
+    document.getElementById('dept-view-title').textContent = name;
+    document.getElementById('dept-news-head').textContent  = data.news;
+    document.getElementById('dept-head-name').textContent  = data.head;
+    document.getElementById('dept-email').textContent      = data.email;
+    document.querySelectorAll('.wf-step').forEach((s, i) => s.classList.toggle('active', i === 0));
+
+    // Document Control tiles → open doc-type view for that dept
+    const isDocControl = name === 'Document Control';
+
+    document.getElementById('dept-sub-grid').innerHTML = data.sub.map(s => {
+      const onclick = isDocControl
+        ? `navigate('doctype',{dept:'${s.name}',type:null})`
+        : `navigate('dept','${s.name}')`;
+      return `
+        <div class="dept-tile" onclick="${onclick}">
+          <div class="dt-icon"><i class="fa ${s.icon}"></i></div>
+          <div class="dt-name">${s.name}</div>
+          <div class="dt-count">${s.count}</div>
+          <i class="fa fa-chevron-right dt-arrow"></i>
+        </div>`;
+    }).join('');
+  }
+
+  /* ══════════════════════════════
+     DOC-TYPE DATA  (per dept inside Document Control)
+  ══════════════════════════════ */
+
+  // Document types shown as category cards
+  const DOC_TYPES = [
+    { key:'SOP',       label:'SOP',       full:'Standard Operating Procedure', icon:'fa-list-check',        color:'#dbeafe', text:'#2563eb' },
+    { key:'Procedure', label:'Procedure', full:'Quality / Work Procedure',      icon:'fa-gears',             color:'#dcfce7', text:'#16a34a' },
+    { key:'SIP',       label:'SIP',       full:'Sampling & Inspection Plan',    icon:'fa-magnifying-glass',  color:'#fef3c7', text:'#d97706' },
+    { key:'FM',        label:'FM / Form', full:'Form / แบบฟอร์ม',              icon:'fa-file-lines',        color:'#ffe4e6', text:'#e11d48' },
+    { key:'WI',        label:'WI',        full:'Work Instruction',              icon:'fa-screwdriver-wrench',color:'#ede9fe', text:'#7c3aed' },
+    { key:'Manual',    label:'Manual',    full:'Manual / คู่มือ',              icon:'fa-book-open',         color:'#ccfbf1', text:'#0f766e' },
+    { key:'Policy',    label:'Policy',    full:'นโยบาย / Policy',              icon:'fa-shield-halved',     color:'#ffedd5', text:'#c2410c' },
+  ];
+
+  // Sample documents per dept — keyed by dept name
+  const docTypeData = {
+    IT: [
+      { no:'SOP-IT-001', name:'SOP การจัดการ User Account',              type:'SOP',       rev:3, date:'06/05/2569', status:'upd' },
+      { no:'SOP-IT-002', name:'SOP การสำรองข้อมูล (Backup)',             type:'SOP',       rev:2, date:'01/05/2569', status:'upd' },
+      { no:'WI-IT-001',  name:'WI Network Setup & Configuration',         type:'WI',        rev:5, date:'06/05/2569', status:'new' },
+      { no:'WI-IT-002',  name:'WI การติดตั้ง Software ใหม่',             type:'WI',        rev:2, date:'28/04/2569', status:'rev' },
+      { no:'WI-IT-003',  name:'WI การแก้ไขปัญหาเครื่องพิมพ์',           type:'WI',        rev:1, date:'20/04/2569', status:'new' },
+      { no:'POL-IT-001', name:'IT Security Policy 2569',                  type:'Policy',    rev:4, date:'25/04/2569', status:'upd' },
+      { no:'POL-IT-002', name:'BYOD & Mobile Device Policy',              type:'Policy',    rev:2, date:'15/04/2569', status:'rev' },
+      { no:'FM-IT-001',  name:'FM แบบฟอร์มขอเปิด User / สิทธิ์เข้าถึง', type:'FM',        rev:3, date:'18/04/2569', status:'upd' },
+      { no:'FM-IT-002',  name:'FM แบบฟอร์มขอ Software License',          type:'FM',        rev:1, date:'10/04/2569', status:'new' },
+      { no:'MAN-IT-001', name:'IT Infrastructure Manual',                 type:'Manual',    rev:2, date:'05/04/2569', status:'rev' },
+    ],
+    QA: [
+      { no:'SOP-QA-001', name:'SOP การตรวจรับวัตถุดิบ (Incoming)',       type:'SOP',       rev:4, date:'04/05/2569', status:'upd' },
+      { no:'SOP-QA-002', name:'SOP การตรวจสอบระหว่างกระบวนการ',          type:'SOP',       rev:3, date:'28/04/2569', status:'rev' },
+      { no:'SIP-QA-001', name:'SIP Incoming Material Sampling Plan',      type:'SIP',       rev:2, date:'06/05/2569', status:'new' },
+      { no:'SIP-QA-002', name:'SIP In-Process Inspection Plan',           type:'SIP',       rev:3, date:'01/05/2569', status:'upd' },
+      { no:'SIP-QA-003', name:'SIP Final Product Inspection Plan',        type:'SIP',       rev:1, date:'20/04/2569', status:'new' },
+      { no:'WI-QA-001',  name:'WI การใช้เครื่องมือวัด (Caliper/CMM)',    type:'WI',        rev:2, date:'25/04/2569', status:'upd' },
+      { no:'FM-QA-001',  name:'FM Non-Conformance Report (NCR)',          type:'FM',        rev:5, date:'04/05/2569', status:'upd' },
+      { no:'FM-QA-002',  name:'FM Inspection Record Sheet',               type:'FM',        rev:3, date:'18/04/2569', status:'rev' },
+      { no:'FM-QA-003',  name:'FM Customer Complaint Form',               type:'FM',        rev:2, date:'10/04/2569', status:'rev' },
+      { no:'PRO-QA-001', name:'Procedure การ Calibration เครื่องมือวัด', type:'Procedure', rev:4, date:'25/04/2569', status:'upd' },
+    ],
+    QMS: [
+      { no:'PRO-QMS-001',name:'Procedure Document Control',               type:'Procedure', rev:5, date:'06/05/2569', status:'new' },
+      { no:'PRO-QMS-002',name:'Procedure Internal Audit',                 type:'Procedure', rev:3, date:'01/05/2569', status:'upd' },
+      { no:'PRO-QMS-003',name:'Procedure Corrective Action (CAPA)',       type:'Procedure', rev:3, date:'04/05/2569', status:'upd' },
+      { no:'PRO-QMS-004',name:'Procedure Management Review',              type:'Procedure', rev:2, date:'28/04/2569', status:'rev' },
+      { no:'SOP-QMS-001',name:'SOP การจัดทำเอกสาร ISO',                  type:'SOP',       rev:4, date:'20/04/2569', status:'upd' },
+      { no:'WI-QMS-001', name:'WI Document Numbering System',             type:'WI',        rev:4, date:'18/04/2569', status:'rev' },
+      { no:'FM-QMS-001', name:'FM Document Change Request Form',          type:'FM',        rev:3, date:'15/04/2569', status:'rev' },
+      { no:'FM-QMS-002', name:'FM Internal Audit Checklist',              type:'FM',        rev:2, date:'10/04/2569', status:'rev' },
+      { no:'MAN-QMS-001',name:'Quality Manual ISO 9001:2015',             type:'Manual',    rev:5, date:'05/04/2569', status:'upd' },
+      { no:'POL-QMS-001',name:'Quality Policy Statement',                 type:'Policy',    rev:3, date:'01/04/2569', status:'rev' },
+    ],
+    SAFETY: [
+      { no:'SOP-SAF-001',name:'SOP การรายงานอุบัติเหตุ',                 type:'SOP',       rev:3, date:'01/05/2569', status:'upd' },
+      { no:'SOP-SAF-002',name:'SOP การใช้อุปกรณ์ PPE',                   type:'SOP',       rev:2, date:'20/04/2569', status:'rev' },
+      { no:'WI-SAF-001', name:'WI การจัดการสารเคมีอันตราย',              type:'WI',        rev:4, date:'28/04/2569', status:'upd' },
+      { no:'WI-SAF-002', name:'WI การซ้อมอพยพหนีไฟ',                     type:'WI',        rev:2, date:'15/04/2569', status:'rev' },
+      { no:'FM-SAF-001', name:'FM Safety Inspection Checklist',           type:'FM',        rev:1, date:'28/04/2569', status:'new' },
+      { no:'FM-SAF-002', name:'FM Accident / Incident Report Form',       type:'FM',        rev:3, date:'18/04/2569', status:'rev' },
+      { no:'FM-SAF-003', name:'FM Chemical Hazard Assessment Form',       type:'FM',        rev:2, date:'10/04/2569', status:'rev' },
+      { no:'PRO-SAF-001',name:'Procedure Emergency Response Plan',        type:'Procedure', rev:3, date:'25/04/2569', status:'upd' },
+      { no:'POL-SAF-001',name:'Safety & Occupational Health Policy',      type:'Policy',    rev:2, date:'05/04/2569', status:'rev' },
+      { no:'MAN-SAF-001',name:'Safety Manual & Guidelines',               type:'Manual',    rev:3, date:'01/04/2569', status:'rev' },
+    ],
+    HR: [
+      { no:'PRO-HR-001', name:'Procedure การรับสมัครพนักงานใหม่',        type:'Procedure', rev:2, date:'01/05/2569', status:'upd' },
+      { no:'PRO-HR-002', name:'Procedure การฝึกอบรมพนักงาน',             type:'Procedure', rev:3, date:'25/04/2569', status:'rev' },
+      { no:'SOP-HR-001', name:'SOP การยื่นใบลาและอนุมัติ',               type:'SOP',       rev:4, date:'04/05/2569', status:'upd' },
+      { no:'SOP-HR-002', name:'SOP การประเมินผลการปฏิบัติงาน',           type:'SOP',       rev:2, date:'20/04/2569', status:'rev' },
+      { no:'FM-HR-001',  name:'FM ใบลากิจ / ลาป่วย / ลาพักร้อน',        type:'FM',        rev:3, date:'01/05/2569', status:'upd' },
+      { no:'FM-HR-002',  name:'FM แบบฟอร์มการประเมินผลงาน',              type:'FM',        rev:2, date:'15/04/2569', status:'rev' },
+      { no:'FM-HR-003',  name:'FM Training Attendance Record',            type:'FM',        rev:1, date:'10/04/2569', status:'new' },
+      { no:'POL-HR-001', name:'HR Leave Policy 2569',                     type:'Policy',    rev:2, date:'01/05/2569', status:'rev' },
+      { no:'POL-HR-002', name:'Code of Conduct Policy',                   type:'Policy',    rev:3, date:'28/04/2569', status:'upd' },
+      { no:'MAN-HR-001', name:'Employee Handbook 2569',                   type:'Manual',    rev:2, date:'05/04/2569', status:'rev' },
+    ],
+    Procurement: [
+      { no:'SOP-PRO-001',name:'SOP การจัดซื้อจัดจ้าง',                  type:'SOP',       rev:3, date:'01/05/2569', status:'upd' },
+      { no:'SOP-PRO-002',name:'SOP การประเมินผู้ขาย (Supplier Eval.)',   type:'SOP',       rev:2, date:'20/04/2569', status:'rev' },
+      { no:'FM-PRO-001', name:'FM Purchase Request Form',                 type:'FM',        rev:4, date:'06/05/2569', status:'new' },
+      { no:'FM-PRO-002', name:'FM Supplier Evaluation Form',              type:'FM',        rev:2, date:'15/04/2569', status:'rev' },
+      { no:'PRO-PRO-001',name:'Procedure Supplier Qualification',         type:'Procedure', rev:2, date:'25/04/2569', status:'upd' },
+    ],
+  };
+
+  // Track current filter state for doctype view
+  let _dtDept    = '';
+  let _dtType    = null;  // null = all
+  let _dtAllDocs = [];
+
+  function loadDocTypeView(dept, type) {
+    _dtDept    = dept;
+    _dtType    = type;
+    _dtAllDocs = docTypeData[dept] || [];
+
+    // Header text
+    document.getElementById('dt-breadcrumb-dept').textContent = dept;
+    document.getElementById('dt-page-title').textContent      = `${dept} — เอกสารทั้งหมด`;
+    document.getElementById('dt-page-sub').textContent        =
+      `SOP · Procedure · SIP · FM · WI และเอกสารอื่นๆ ของฝ่าย ${dept}`;
+
+    // Count per type
+    const countByType = {};
+    _dtAllDocs.forEach(d => { countByType[d.type] = (countByType[d.type] || 0) + 1; });
+
+    // Build type cards
+    document.getElementById('dt-type-grid').innerHTML = DOC_TYPES.map(t => {
+      const cnt = countByType[t.key] || 0;
+      const isActive = type === t.key;
+      return `
+        <div class="doctype-card ${isActive ? 'active' : ''}" onclick="selectDocType(this,'${t.key}')">
+          <span class="dtc-count-badge">${cnt}</span>
+          <div class="dtc-icon" style="${!isActive ? `background:${t.color};color:${t.text}` : ''}">
+            <i class="fa ${t.icon}"></i>
+          </div>
+          <div class="dtc-label">${t.label}</div>
+          <div class="dtc-full">${t.full}</div>
+        </div>`;
+    }).join('');
+
+    // Reset search & filter
+    document.getElementById('dt-search-input').value = '';
+    document.getElementById('dt-rev-filter').value   = '';
+
+    renderDocTable(_dtAllDocs, type);
+  }
+
+  function selectDocType(el, typeKey) {
+    // Toggle: click active card → show all
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.doctype-card').forEach(c => c.classList.remove('active'));
+    const newType = wasActive ? null : typeKey;
+    if (!wasActive) el.classList.add('active');
+    _dtType = newType;
+    document.getElementById('dt-search-input').value = '';
+    document.getElementById('dt-rev-filter').value   = '';
+    renderDocTable(_dtAllDocs, newType);
+  }
+
+  function filterDocTable() {
+    const q      = document.getElementById('dt-search-input').value.toLowerCase();
+    const status = document.getElementById('dt-rev-filter').value;
+    let rows = _dtAllDocs.filter(d => {
+      const matchType   = !_dtType || d.type === _dtType;
+      const matchSearch = !q || d.no.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
+      const matchStatus = !status || d.status === status;
+      return matchType && matchSearch && matchStatus;
+    });
+    renderDocTable(rows, null, true); // true = already filtered, don't re-filter by _dtType
+  }
+
+  function renderDocTable(docs, typeFilter, skipTypeFilter) {
+    if (!skipTypeFilter && typeFilter) docs = docs.filter(d => d.type === typeFilter);
+
+    const badgeMap = { new:'<span class="badge new">New</span>', upd:'<span class="badge upd">Updated</span>', rev:'<span class="badge rev">Rev</span>' };
+    const iconMap  = { SOP:'fa-list-check', Procedure:'fa-gears', SIP:'fa-magnifying-glass', FM:'fa-file-lines', WI:'fa-screwdriver-wrench', Manual:'fa-book-open', Policy:'fa-shield-halved' };
+
+    const typeName = typeFilter ? DOC_TYPES.find(t => t.key === typeFilter)?.label || typeFilter : 'ทั้งหมด';
+    document.getElementById('dt-table-title').textContent = `เอกสาร${typeName !== 'ทั้งหมด' ? ' — ' + typeName : 'ทั้งหมด'}`;
+    document.getElementById('dt-table-count').textContent = `${docs.length} รายการ`;
+
+    document.getElementById('dt-table-body').innerHTML = docs.length
+      ? docs.map(d => `
+          <tr>
+            <td style="font-weight:600;color:var(--navy);font-family:monospace;font-size:.82rem">${d.no}</td>
+            <td>
+              <div style="font-weight:600;font-size:.85rem">${d.name}</div>
+            </td>
+            <td>
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;color:var(--muted)">
+                <i class="fa ${iconMap[d.type] || 'fa-file'}"></i> ${d.type}
+              </span>
+            </td>
+            <td style="text-align:center;font-weight:700">${d.rev}</td>
+            <td style="color:var(--muted);font-size:.8rem">${d.date}</td>
+            <td>${badgeMap[d.status] || ''}</td>
+            <td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td>
+          </tr>`)
+        .join('')
+      : `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)"><i class="fa fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:.4"></i>ไม่พบเอกสารที่ตรงกัน</td></tr>`;
+  }
+
+</script>
+</body>
+</html>
