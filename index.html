@@ -1596,6 +1596,165 @@
       .doctype-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
+    /* ─── Docs sidebar group label ─── */
+    .docs-group-label {
+      font-size: .68rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      padding: 0 14px 7px;
+    }
+
+    /* ─── Cancelled / void badge ─── */
+    .badge.void {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ─── Clickable table row ─── */
+    .docs-table tbody tr.clickable-row {
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .docs-table tbody tr.clickable-row:hover td { background: #f0f4ff; }
+    .docs-table tbody tr.row-void td {
+      opacity: .55;
+    }
+    .docs-table tbody tr.row-void .doc-no-cell {
+      text-decoration: line-through;
+    }
+
+    /* ─── Doc detail modal ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.2);
+      overflow: hidden;
+      animation: modalIn .18s ease;
+    }
+    @keyframes modalIn {
+      from { transform: translateY(18px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-head {
+      background: var(--navy);
+      color: #fff;
+      padding: 18px 22px 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .modal-head .mh-title { font-size: 1rem; font-weight: 700; line-height: 1.4; }
+    .modal-head .mh-no   { font-size: .78rem; color: rgba(255,255,255,.6); margin-top: 3px; font-family: monospace; }
+    .modal-close {
+      background: rgba(255,255,255,.15);
+      border: none; color: #fff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: .9rem;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+      transition: background .12s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.28); }
+
+    .modal-body { padding: 20px 22px; }
+
+    .modal-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .modal-meta-item .mmi-label {
+      font-size: .68rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      margin-bottom: 3px;
+    }
+    .modal-meta-item .mmi-value {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .modal-void-notice {
+      display: none;
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      color: #dc2626;
+      font-size: .83rem;
+      font-weight: 600;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-void-notice.show { display: flex; }
+
+    .modal-foot {
+      padding: 14px 22px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .modal-btn-cancel {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 8px 18px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .85rem;
+      font-weight: 600;
+      transition: background .12s;
+    }
+    .modal-btn-cancel:hover { background: var(--surface); }
+    .modal-btn-dl {
+      background: var(--navy);
+      border: none;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      font-size: .85rem;
+      font-weight: 700;
+      display: flex; align-items: center; gap: 7px;
+      transition: background .12s;
+    }
+    .modal-btn-dl:hover { background: var(--navy-mid); }
+    .modal-btn-dl:disabled {
+      background: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
     /* ─── Utility ─── */
     .hidden { display: none !important; }
 
@@ -1656,12 +1815,11 @@
         <i class="fa fa-sitemap"></i> แผนก <i class="fa fa-chevron-down" style="font-size:.65rem"></i>
       </span>
       <div class="dropdown-menu">
-        <a href="#" onclick="navigate('dept','Document Control');return false"><span class="dot"></span> Document Control</a>
-        <a href="#" onclick="navigate('dept','IT');return false"><span class="dot"></span> IT</a>
-        <a href="#" onclick="navigate('dept','QA');return false"><span class="dot"></span> QA</a>
-        <a href="#" onclick="navigate('dept','QMS');return false"><span class="dot"></span> QMS</a>
-        <a href="#" onclick="navigate('dept','SAFETY');return false"><span class="dot"></span> SAFETY</a>
-        <a href="#" onclick="navigate('dept','HR');return false"><span class="dot"></span> HR</a>
+        <a href="#" onclick="navigate('dept','IT');return false"><span class="dot" style="background:#3b82f6"></span> IT</a>
+        <a href="#" onclick="navigate('dept','QA');return false"><span class="dot" style="background:#16a34a"></span> QA</a>
+        <a href="#" onclick="navigate('dept','QMS');return false"><span class="dot" style="background:#d97706"></span> QMS</a>
+        <a href="#" onclick="navigate('dept','SAFETY');return false"><span class="dot" style="background:#e11d48"></span> SAFETY</a>
+        <a href="#" onclick="navigate('dept','HR');return false"><span class="dot" style="background:#7c3aed"></span> HR</a>
       </div>
     </li>
     <li id="nav-org"><a href="#" onclick="navigate('org');return false"><i class="fa fa-building"></i> โครงสร้างองค์กร</a></li>
@@ -2144,15 +2302,15 @@
 
   <!-- ── Top nav bar (breadcrumb stays same) ── -->
   <div class="dept-view-head">
-    <button class="dept-back" onclick="navigate('home')">
-      <i class="fa fa-arrow-left"></i> กลับหน้าหลัก
+    <button class="dept-back" id="dept-back-btn" onclick="navigate('home')">
+      <i class="fa fa-arrow-left"></i> <span id="dept-back-label">กลับหน้าหลัก</span>
     </button>
     <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.55);font-size:.85rem">
       <span style="cursor:pointer" onclick="navigate('home')">หน้าหลัก</span>
       <i class="fa fa-chevron-right" style="font-size:.65rem"></i>
-      <span style="color:rgba(255,255,255,.7)">แผนก</span>
-      <i class="fa fa-chevron-right" style="font-size:.65rem"></i>
-      <span style="color:#fff;font-weight:700" id="dept-view-title">Document Control</span>
+      <span id="dept-breadcrumb-parent" style="color:rgba(255,255,255,.7);cursor:pointer">เอกสารทั้งหมด</span>
+      <i class="fa fa-chevron-right" id="dept-breadcrumb-sep" style="font-size:.65rem;display:none"></i>
+      <span style="color:#fff;font-weight:700" id="dept-view-title"></span>
     </div>
   </div>
 
@@ -2313,7 +2471,7 @@
     <div class="page-breadcrumb">
       <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
       <i class="fa fa-chevron-right"></i>
-      <span class="bc-home" onclick="navigate('dept','Document Control')">Document Control</span>
+      <span class="bc-home" onclick="navigate('docs')">เอกสารทั้งหมด</span>
       <i class="fa fa-chevron-right"></i>
       <span class="bc-current" id="dt-breadcrumb-dept">IT</span>
     </div>
@@ -2323,8 +2481,8 @@
         <div class="page-subtitle" id="dt-page-sub">SOP · Procedure · SIP · FM · WI และเอกสารอื่นๆ ของฝ่าย IT</div>
       </div>
       <div style="display:flex;gap:8px">
-        <button class="page-back-btn" onclick="navigate('dept','Document Control')">
-          <i class="fa fa-arrow-left"></i> กลับ Document Control
+        <button class="page-back-btn" onclick="navigate('docs')">
+          <i class="fa fa-arrow-left"></i> กลับเอกสารทั้งหมด
         </button>
         <button class="page-back-btn" onclick="navigate('home')" style="background:rgba(255,255,255,.08)">
           <i class="fa fa-house"></i>
@@ -2473,91 +2631,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     PAGE: เอกสารทั้งหมด
-══════════════════════════════════════ -->
-<div id="docs-view" class="page-view">
-  <div class="page-header">
-    <div class="page-breadcrumb">
-      <span class="bc-home" onclick="navigate('home')"><i class="fa fa-house"></i> หน้าหลัก</span>
-      <i class="fa fa-chevron-right"></i>
-      <span class="bc-current">เอกสารทั้งหมด</span>
-    </div>
-    <div class="page-header-inner">
-      <div>
-        <div class="page-title"><i class="fa fa-folder-open"></i> เอกสารทั้งหมด</div>
-        <div class="page-subtitle">คลังเอกสารขึ้นทะเบียน – สามารถกรองตามแผนกและประเภทเอกสาร</div>
-      </div>
-      <button class="page-back-btn" onclick="navigate('home')"><i class="fa fa-arrow-left"></i> กลับหน้าหลัก</button>
-    </div>
-  </div>
-  <div class="page-body">
-    <div class="docs-layout">
-      <!-- Sidebar -->
-      <div class="docs-sidebar">
-        <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 14px 8px">แผนก</div>
-        <div class="docs-sidebar-item active" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-layer-group"></i></div> ทั้งหมด <span class="docs-sidebar-count">47</span>
-        </div>
-        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-certificate"></i></div> QMS <span class="docs-sidebar-count">15</span>
-        </div>
-        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-magnifying-glass-chart"></i></div> QA <span class="docs-sidebar-count">10</span>
-        </div>
-        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-laptop-code"></i></div> IT <span class="docs-sidebar-count">8</span>
-        </div>
-        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-helmet-safety"></i></div> SAFETY <span class="docs-sidebar-count">7</span>
-        </div>
-        <div class="docs-sidebar-item" onclick="setDocSidebar(this)">
-          <div class="ds-icon"><i class="fa fa-users"></i></div> HR <span class="docs-sidebar-count">7</span>
-        </div>
-      </div>
-      <!-- Table -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-          <div class="search-box" style="flex:1;min-width:180px;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;gap:8px;font-size:.85rem;color:var(--muted)">
-            <i class="fa fa-magnifying-glass"></i><input type="text" placeholder="ค้นหาเลขที่/ชื่อเอกสาร…" style="border:none;outline:none;font-family:'Sarabun',sans-serif;font-size:.85rem;width:100%">
-          </div>
-          <select style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:.82rem;color:var(--text);background:#fff">
-            <option>ทุกประเภท</option><option>Procedure</option><option>Work Instruction</option><option>Form</option><option>Policy</option>
-          </select>
-          <select style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:.82rem;color:var(--text);background:#fff">
-            <option>เรียงตาม: ล่าสุด</option><option>ชื่อ A–Z</option><option>Rev สูงสุด</option>
-          </select>
-        </div>
-        <div class="card docs-table-wrap">
-          <table class="docs-table">
-            <thead>
-              <tr>
-                <th>เลขที่เอกสาร</th>
-                <th>ชื่อเอกสาร</th>
-                <th>แผนก</th>
-                <th>ประเภท</th>
-                <th>Rev.</th>
-                <th>วันที่อัปเดต</th>
-                <th>สถานะ</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>WI-IT-001</td><td>Work Instruction – Network Setup</td><td>IT</td><td>WI</td><td>5</td><td>06/05/2569</td><td><span class="badge new">New</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>QP-QMS-003</td><td>Quality Procedure – Corrective Action</td><td>QMS</td><td>Procedure</td><td>3</td><td>04/05/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>HR-POL-005</td><td>HR Leave Policy 2569</td><td>HR</td><td>Policy</td><td>2</td><td>01/05/2569</td><td><span class="badge rev">Rev</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>SF-SAF-010</td><td>Safety Inspection Checklist</td><td>SAFETY</td><td>Form</td><td>1</td><td>28/04/2569</td><td><span class="badge new">New</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>QA-ITP-008</td><td>Inspection &amp; Test Plan</td><td>QA</td><td>Procedure</td><td>4</td><td>25/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>QP-QMS-001</td><td>Quality Manual ISO 9001:2015</td><td>QMS</td><td>Manual</td><td>5</td><td>20/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>WI-DC-003</td><td>Document Numbering Instruction</td><td>QMS</td><td>WI</td><td>4</td><td>18/04/2569</td><td><span class="badge rev">Rev</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-              <tr><td>FR-QA-012</td><td>Non-Conformance Report Form</td><td>QA</td><td>Form</td><td>3</td><td>15/04/2569</td><td><span class="badge upd">Updated</span></td><td><button class="doc-dl-btn"><i class="fa fa-download"></i> ดาวน์โหลด</button></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- ══════════════════════════════════════
      PAGE: โครงสร้างองค์กร
@@ -2743,6 +2816,59 @@
 </div>
 
 <!-- ══════════════════════════════════════
+     DOC DETAIL MODAL
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="docModal" onclick="closeDocModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div>
+        <div class="mh-title" id="modal-doc-name">ชื่อเอกสาร</div>
+        <div class="mh-no"   id="modal-doc-no">เลขที่เอกสาร</div>
+      </div>
+      <button class="modal-close" onclick="closeDocModal()"><i class="fa fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-void-notice" id="modal-void-notice">
+        <i class="fa fa-ban"></i>
+        เอกสารฉบับนี้ถูกยกเลิก (Void) แล้ว — ไม่อนุญาตให้ดาวน์โหลด
+      </div>
+      <div class="modal-meta-grid">
+        <div class="modal-meta-item">
+          <div class="mmi-label">แผนก</div>
+          <div class="mmi-value" id="modal-dept">–</div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="mmi-label">ประเภทเอกสาร</div>
+          <div class="mmi-value" id="modal-type">–</div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="mmi-label">Revision</div>
+          <div class="mmi-value" id="modal-rev">–</div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="mmi-label">วันที่อัปเดต</div>
+          <div class="mmi-value" id="modal-date">–</div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="mmi-label">สถานะ</div>
+          <div class="mmi-value" id="modal-status-cell">–</div>
+        </div>
+        <div class="modal-meta-item">
+          <div class="mmi-label">ผู้อนุมัติ</div>
+          <div class="mmi-value" id="modal-approver">–</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="modal-btn-cancel" onclick="closeDocModal()">ปิด</button>
+      <button class="modal-btn-dl" id="modal-dl-btn">
+        <i class="fa fa-download"></i> ดาวน์โหลดเอกสาร
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
      FOOTER
 ══════════════════════════════════════ -->
 <footer>
@@ -2799,12 +2925,16 @@
     if (view === 'home') {
       document.getElementById('home-view').style.display = '';
 
+    } else if (view === 'docs') {
+      // เอกสารทั้งหมด = Document Control layout
+      loadDeptView('Document Control', true);
+      document.getElementById('dept-view').classList.add('visible');
+
     } else if (view === 'dept') {
-      loadDeptView(param || 'Document Control');
+      loadDeptView(param, false);
       document.getElementById('dept-view').classList.add('visible');
 
     } else if (view === 'doctype') {
-      // param = { dept, type }  e.g. { dept:'IT', type:'SOP' }
       loadDocTypeView(param.dept, param.type || null);
       document.getElementById('doctype-view').classList.add('visible');
 
@@ -2875,22 +3005,145 @@
     el.classList.add('active');
   }
 
-  /* ─── Docs sidebar ─── */
-  function setDocSidebar(el) {
-    document.querySelectorAll('.docs-sidebar-item').forEach(i => i.classList.remove('active'));
+  /* ══════════════════════════════
+     DOCS VIEW — Document Control
+  ══════════════════════════════ */
+
+  // All docs pooled from docTypeData (populated after docTypeData is defined)
+  let _allDocs = [];
+  let _docsActiveDept = 'all';
+  let _docsActiveType = 'all';
+
+  function initDocsView() {
+    _allDocs = Object.entries(docTypeData).flatMap(([dept, docs]) =>
+      docs.map(d => ({ ...d, dept }))
+    );
+  }
+
+  function selectDocsDept(el, dept) {
+    document.querySelectorAll('#docs-sidebar .docs-sidebar-item')
+      .forEach(i => i.classList.remove('active'));
     el.classList.add('active');
+    _docsActiveDept = dept;
+    renderDocsTable();
+  }
+
+  function selectDocsType(el, type) {
+    document.querySelectorAll('#docs-type-sidebar .docs-sidebar-item')
+      .forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    _docsActiveType = type;
+    renderDocsTable();
+  }
+
+  function renderDocsTable() {
+    if (!_allDocs.length) initDocsView();
+
+    const q      = (document.getElementById('docs-search')?.value || '').toLowerCase();
+    const status = document.getElementById('docs-status-filter')?.value || '';
+
+    const rows = _allDocs.filter(d => {
+      const matchDept   = _docsActiveDept === 'all' || d.dept === _docsActiveDept;
+      const matchType   = _docsActiveType === 'all' || d.type === _docsActiveType;
+      const matchSearch = !q || d.no.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
+      const matchStatus = !status || d.status === status;
+      return matchDept && matchType && matchSearch && matchStatus;
+    });
+
+    const label = _docsActiveDept === 'all' ? 'ทั้งหมด' : _docsActiveDept;
+    document.getElementById('docs-table-title').textContent =
+      `Document Control${_docsActiveDept !== 'all' ? ' — ' + label : ''}`;
+    document.getElementById('docs-table-count').textContent = `${rows.length} รายการ`;
+
+    const badgeMap = {
+      new:  '<span class="badge new">New</span>',
+      upd:  '<span class="badge upd">Updated</span>',
+      rev:  '<span class="badge rev">Rev</span>',
+      void: '<span class="badge void">ยกเลิก</span>'
+    };
+    const iconMap = {
+      SOP:'fa-list-check', Procedure:'fa-gears', SIP:'fa-magnifying-glass',
+      FM:'fa-file-lines', WI:'fa-screwdriver-wrench', Manual:'fa-book-open', Policy:'fa-shield-halved'
+    };
+
+    const tbody = document.getElementById('docs-table-body');
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)">
+        <i class="fa fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:.4"></i>ไม่พบเอกสาร</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map((d, i) => {
+      const isVoid = d.status === 'void';
+      return `
+        <tr class="clickable-row${isVoid ? ' row-void' : ''}"
+            onclick="openDocModal(${JSON.stringify(d).replace(/"/g, '&quot;')})">
+          <td>
+            <span class="doc-no-cell" style="font-weight:700;color:var(--navy);font-family:monospace;font-size:.82rem">
+              ${d.no}
+            </span>
+          </td>
+          <td style="font-size:.85rem">${d.name}</td>
+          <td>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;color:var(--muted)">
+              <i class="fa ${iconMap[d.type]||'fa-file'}"></i> ${d.type}
+            </span>
+          </td>
+          <td style="text-align:center;font-weight:700">${d.rev}</td>
+          <td style="color:var(--muted);font-size:.8rem">${d.date}</td>
+          <td>${badgeMap[d.status]||''}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  /* ─── Doc detail modal ─── */
+  function openDocModal(d) {
+    const isVoid = d.status === 'void';
+    const badgeMap = {
+      new:'<span class="badge new">New</span>', upd:'<span class="badge upd">Updated</span>',
+      rev:'<span class="badge rev">Rev</span>', void:'<span class="badge void">ยกเลิก</span>'
+    };
+    const approvers = { IT:'คุณวิชัย รักงาน', QA:'คุณนภา ตรวจสอบ', QMS:'คุณประภาส คุณภาพ',
+                        SAFETY:'คุณสมปอง ปลอดภัย', HR:'คุณนารี ดูแลคน', Procurement:'คุณสมศักดิ์ จัดซื้อ' };
+
+    document.getElementById('modal-doc-name').textContent  = d.name;
+    document.getElementById('modal-doc-no').textContent    = d.no;
+    document.getElementById('modal-dept').textContent      = d.dept || '–';
+    document.getElementById('modal-type').textContent      = d.type;
+    document.getElementById('modal-rev').textContent       = `Rev. ${d.rev}`;
+    document.getElementById('modal-date').textContent      = d.date;
+    document.getElementById('modal-approver').textContent  = approvers[d.dept] || '–';
+    document.getElementById('modal-status-cell').innerHTML = badgeMap[d.status] || '–';
+
+    const notice = document.getElementById('modal-void-notice');
+    notice.classList.toggle('show', isVoid);
+
+    const dlBtn = document.getElementById('modal-dl-btn');
+    dlBtn.disabled = isVoid;
+    dlBtn.innerHTML = isVoid
+      ? '<i class="fa fa-ban"></i> ไม่อนุญาตดาวน์โหลด'
+      : '<i class="fa fa-download"></i> ดาวน์โหลดเอกสาร';
+
+    document.getElementById('docModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDocModal(e) {
+    if (e && e.target !== document.getElementById('docModal')) return;
+    document.getElementById('docModal').classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   /* ─── Department data & renderer ─── */
   const deptData = {
     'Document Control': {
       sub: [
-        { name:'IT',          icon:'fa-laptop-code',            count:'12 เอกสาร' },
-        { name:'QA',          icon:'fa-magnifying-glass-chart', count:'8 เอกสาร'  },
-        { name:'QMS',         icon:'fa-certificate',            count:'15 เอกสาร' },
-        { name:'SAFETY',      icon:'fa-helmet-safety',          count:'10 เอกสาร' },
-        { name:'HR',          icon:'fa-users',                  count:'7 เอกสาร'  },
+        { name:'IT',          icon:'fa-laptop-code',            count:'11 เอกสาร' },
+        { name:'QA',          icon:'fa-magnifying-glass-chart', count:'12 เอกสาร' },
         { name:'Procurement', icon:'fa-truck',                  count:'5 เอกสาร'  },
+        { name:'SAFETY',      icon:'fa-helmet-safety',          count:'10 เอกสาร' },
+        { name:'HR',          icon:'fa-users',                  count:'10 เอกสาร' },
+        { name:'QMS',         icon:'fa-certificate',            count:'12 เอกสาร' },
       ],
       news: 'ข่าวสารประชาสัมพันธ์ของ Document Control — เอกสาร WI-DC-003 Rev.4 เผยแพร่แล้ว | ขั้นตอนการขึ้นทะเบียนเอกสารฉบับปรับปรุงมีผลบังคับ 1 มิ.ย. 2569',
       head: 'คุณสมชาย มีสุข', email: 'doccontrol@ndc-industrial.com'
@@ -2961,16 +3214,40 @@
     }
   };
 
-  function loadDeptView(name) {
+  function loadDeptView(name, isDocsRoute) {
     const data = deptData[name] || deptData.default;
-    document.getElementById('dept-view-title').textContent = name;
-    document.getElementById('dept-news-head').textContent  = data.news;
-    document.getElementById('dept-head-name').textContent  = data.head;
-    document.getElementById('dept-email').textContent      = data.email;
+    const isDocControl = name === 'Document Control';
+
+    // ── Breadcrumb & back-button ──
+    const titleEl   = document.getElementById('dept-view-title');
+    const parentEl  = document.getElementById('dept-breadcrumb-parent');
+    const sepEl     = document.getElementById('dept-breadcrumb-sep');
+    const backLabel = document.getElementById('dept-back-label');
+    const backBtn   = document.getElementById('dept-back-btn');
+
+    if (isDocsRoute) {
+      parentEl.textContent = 'เอกสารทั้งหมด';
+      parentEl.onclick     = () => navigate('home');
+      sepEl.style.display  = 'none';
+      titleEl.textContent  = '';
+      backLabel.textContent = 'กลับหน้าหลัก';
+      backBtn.onclick      = () => navigate('home');
+    } else {
+      parentEl.textContent = 'แผนก';
+      parentEl.onclick     = null;
+      sepEl.style.display  = '';
+      titleEl.textContent  = name;
+      backLabel.textContent = 'กลับหน้าหลัก';
+      backBtn.onclick      = () => navigate('home');
+    }
+
+    document.getElementById('dept-news-head').textContent = data.news;
+    document.getElementById('dept-head-name').textContent = data.head;
+    document.getElementById('dept-email').textContent     = data.email;
     document.querySelectorAll('.wf-step').forEach((s, i) => s.classList.toggle('active', i === 0));
 
-    // Document Control tiles → open doc-type view for that dept
-    const isDocControl = name === 'Document Control';
+    const secHead = document.querySelector('#dept-view .dept-section-head span:last-child');
+    if (secHead) secHead.textContent = isDocControl ? 'แผนกที่ใช้งานเอกสาร' : 'แผนกย่อย / ส่วนงาน';
 
     document.getElementById('dept-sub-grid').innerHTML = data.sub.map(s => {
       const onclick = isDocControl
@@ -3014,6 +3291,7 @@
       { no:'FM-IT-001',  name:'FM แบบฟอร์มขอเปิด User / สิทธิ์เข้าถึง', type:'FM',        rev:3, date:'18/04/2569', status:'upd' },
       { no:'FM-IT-002',  name:'FM แบบฟอร์มขอ Software License',          type:'FM',        rev:1, date:'10/04/2569', status:'new' },
       { no:'MAN-IT-001', name:'IT Infrastructure Manual',                 type:'Manual',    rev:2, date:'05/04/2569', status:'rev' },
+      { no:'WI-IT-099',  name:'WI การตั้งค่า Proxy Server (เวอร์ชันเก่า)', type:'WI',       rev:1, date:'10/01/2569', status:'void' },
     ],
     QA: [
       { no:'SOP-QA-001', name:'SOP การตรวจรับวัตถุดิบ (Incoming)',       type:'SOP',       rev:4, date:'04/05/2569', status:'upd' },
@@ -3026,6 +3304,7 @@
       { no:'FM-QA-002',  name:'FM Inspection Record Sheet',               type:'FM',        rev:3, date:'18/04/2569', status:'rev' },
       { no:'FM-QA-003',  name:'FM Customer Complaint Form',               type:'FM',        rev:2, date:'10/04/2569', status:'rev' },
       { no:'PRO-QA-001', name:'Procedure การ Calibration เครื่องมือวัด', type:'Procedure', rev:4, date:'25/04/2569', status:'upd' },
+      { no:'SIP-QA-099', name:'SIP ฉบับเก่า — ยกเลิกแล้ว',              type:'SIP',       rev:1, date:'05/01/2569', status:'void' },
     ],
     QMS: [
       { no:'PRO-QMS-001',name:'Procedure Document Control',               type:'Procedure', rev:5, date:'06/05/2569', status:'new' },
@@ -3038,6 +3317,7 @@
       { no:'FM-QMS-002', name:'FM Internal Audit Checklist',              type:'FM',        rev:2, date:'10/04/2569', status:'rev' },
       { no:'MAN-QMS-001',name:'Quality Manual ISO 9001:2015',             type:'Manual',    rev:5, date:'05/04/2569', status:'upd' },
       { no:'POL-QMS-001',name:'Quality Policy Statement',                 type:'Policy',    rev:3, date:'01/04/2569', status:'rev' },
+      { no:'PRO-QMS-099',name:'Procedure เก่า — ถูกแทนที่โดย PRO-QMS-001', type:'Procedure', rev:2, date:'01/01/2568', status:'void' },
     ],
     SAFETY: [
       { no:'SOP-SAF-001',name:'SOP การรายงานอุบัติเหตุ',                 type:'SOP',       rev:3, date:'01/05/2569', status:'upd' },
